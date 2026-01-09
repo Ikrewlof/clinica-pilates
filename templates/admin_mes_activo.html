@@ -1,0 +1,33 @@
+﻿{% extends "base.html" %}
+{% block title %}Mes activo{% endblock %}
+
+{% block content %}
+
+<h2>Mes activo actual: {{ mes_literal }} {{ year }} </h2>
+
+<form method="post">
+
+    <label for="mes">Cambiar mes activo</label>
+
+    <input type="month"
+           id="mes"
+           name="mes"
+           value="{{ mes_activo }}"
+           required>
+
+    
+
+    <button class="boton"
+            type="submit"
+            onclick="return confirm(
+                '⚠️ Cambiar el mes activo afecta a clases, recuperaciones y pagos.\n¿Seguro que quieres continuar?'
+            )">
+        Actualizar
+    </button>
+
+</form>
+
+<br>
+<a class="boton" href="/admin">⬅ Volver</a>
+
+{% endblock %}

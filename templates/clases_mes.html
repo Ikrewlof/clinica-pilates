@@ -1,0 +1,135 @@
+﻿{% extends "base.html" %}
+{% block title %}Generar clases del mes{% endblock %}
+
+{% block content %}
+
+<h2>Clases generadas del mes</h2>
+
+<form method="get" class="selector-mes">
+    <label>Mes:</label>
+
+    <input type="month"
+           name="mes"
+           value="{{ '%04d-%02d'|format(year, month) }}"
+           required>
+
+    <button type="submit">Ver clases</button>
+</form>
+
+<form method="post"
+      action="/admin/clases_mes/borrar"
+      onsubmit="return confirm('⚠️ Esto eliminará TODAS las clases del mes. ¿Seguro?');">
+
+    <input type="hidden" name="year" value="{{ year }}">
+    <input type="hidden" name="month" value="{{ month }}">
+
+    <button class="danger">
+        🗑️ Borrar todas las clases del mes
+    </button>
+</form>
+
+<hr>
+
+    {% if calendario %}
+
+<!-- CABECERA -->
+<div class="calendar-header">
+    <div>Lunes</div>
+    <div>Martes</div>
+    <div>Miércoles</div>
+    <div>Jueves</div>
+    <div>Viernes</div>
+</div>
+
+<div class="calendar">
+
+    {# Huecos antes del día 1 #}
+    {% set offset = calendario[0].weekday %}
+    {% for i in range(offset) %}
+    <div class="day empty"></div>
+    {% endfor %}
+
+    {# DÍAS DEL MES #}
+    {% for dia in calendario %}
+
+    {# Saltar sábados (5) y domingos (6) #}
+    {% if dia.weekday < 5 %}
+
+    <div class="day
+         {% if dia.es_hoy %}hoy{% endif %}
+         {% if dia.clases|length>0 %}con-clases{% else %}sin-clases{% endif %}">
+
+        <div class="day-header">
+            <span class="day-number">{{ dia.dia_num }}</span>
+        </div>
+
+        <div class="events">
+            {% for clase in dia.clases.values() %}
+
+            <div class="event {% if clase.es_festivo %}festivo{% endif %}">
+                <div class="event-title">
+                    {{ clase.descripcion }}
+                </div>
+
+                <div class="event-time">
+                    {{ clase.hora }}
+                    ({{ clase.usuarios|length }}/{{ clase.capacidad }})
+                </div>
+
+                {% if clase.es_festivo %}
+                <div class="event-note">
+                    🎉 Día Festivo
+                    {% if clase.motivo_festivo %}
+                    – {{ clase.motivo_festivo }}
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {% if clase.usuarios %}
+                <ul class="usuarios">
+                    {% for u in clase.usuarios %}
+                    <li>{{ u.nombre }}</li>
+                    {% if not clase.es_festivo %}
+                      <form method="post"
+                          action="/admin/clases_mes/quitar"
+                          class="quitar-usuario-form">
+
+                        <input type="hidden" name="usuario_id" value="{{ u.id }}">
+                        <input type="hidden" name="clase_id" value="{{ clase.id }}">
+
+                        <button type="submit"
+                                class="btn-quitar"
+                                title="Quitar a {{ u.nombre }} de esta clase"
+                                onclick="return confirm('¿Quitar a {{ u.nombre }} de esta clase?')">❌ Dar de baja de esta clase
+                        </button>
+                      </form>
+                    {% else %}
+                    <span class="no-quitar" title="No se puede modificar un festivo"></span>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+            </div>
+            
+            {% endfor %}
+        </div>
+
+    </div>
+
+    {% endif %}
+    {% endfor %}
+
+</div>
+
+{% else %}
+<p>No hay clases este mes.</p>
+{% endif %}
+
+<a href="/admin" class="boton boton-secundario">
+    ⬅ Volver
+</a>
+
+{% endblock %}
+
+

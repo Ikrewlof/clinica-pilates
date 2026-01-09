@@ -1,0 +1,596 @@
+﻿/* === CALENDARIO GENERAL === */
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: #f1f3f4;
+    border-bottom: 1px solid #dadce0;
+    font-weight: 600;
+    color: #5f6368;
+}
+
+    .calendar-header div {
+        padding: 10px;
+        text-align: center;
+    }
+
+/* === GRID DEL MES === */
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: minmax(120px, auto);
+    background: #e0e0e0;
+    gap: 1px;
+}
+
+/* === DÍA === */
+
+.day {
+    background: #ffffff;
+    min-height: 140px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .day.empty {
+        background: #f5f5f5;
+    }
+
+    .day.hoy {
+        border: 2px solid #c61a52;
+        background: #f8fbff;
+    }
+
+day.hoy .day-header {
+    background: #e8f0fe;
+    color: #1a73e8;
+    font-weight: bold;
+    
+}
+
+
+/* === CABECERA DEL DÍA === */
+
+.day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #5f6368;
+    margin-bottom: 4px;
+}
+
+.day-number {
+    font-weight: 600;
+    color: #202124;
+    
+}
+
+/* === EVENTOS === */
+
+
+.events {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9px;
+}
+
+/* === EVENTO === */
+
+.event {
+    background: #FFE4E1;
+    color: #000000;
+    border-radius: 6px;
+    padding: 6px;
+    font-size: 0.9rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+
+.event-title {
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #C71585;
+}
+
+.event-time {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    color: #000000;
+    font-style: italic;
+}
+
+/* === FESTIVO === */
+
+.event.festivo {
+    background: #E6E6FA;
+    color: #000000;
+    font-style: italic;
+}
+
+/* === BLOQUEADO (menos de 24h) === */
+
+.event.bloqueado {
+    background: #DCDCDC;
+}
+
+/* === NOTAS === */
+
+.event-note {
+    font-size: 0.9rem;
+    margin-top: 4px;
+    opacity: 0.9;
+    color: #000000;
+    font-style: italic;
+}
+
+/* === BOTÓN BAJA === */
+
+.event form button {
+    margin-top: 4px;
+    background: #FFB6C1;
+    border: none;
+    color: #000000;
+    padding: 4px 6px;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .event form button:hover {
+        background: rgba(255,255,255,0.3);
+    }
+
+/* === EFECTO HOVER === */
+
+.day:hover {
+    background: #f8f9fa;
+}
+
+
+button.danger {
+    background: #c00;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    cursor: pointer;
+}
+
+.quitar-usuario-form {
+    display: inline;
+}
+
+.btn-quitar {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+    .btn-quitar:hover {
+        transform: scale(1.1);
+    }
+
+.no-quitar {
+    opacity: 0.5;
+    font-size: 0.8em;
+}
+
+
+.selector-mes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+    .selector-mes input[type="month"] {
+        padding: 6px;
+        font-size: 1em;
+    }
+
+
+
+:root {
+    --primary: #c51a52;
+    --primary-dark: #a01442;
+    --primary-light: #f6c1d0; /* ← ~70% más claro */
+    --bg: #f4f6f8;
+    --text: #2c2c2c;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* ===== HEADER ===== */
+header {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (max-width: 600px) {
+    .logo {
+        height: 32px;
+    }
+
+    header h1 {
+        font-size: 18px;
+    }
+}
+
+
+header a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+}
+
+/* ===== MAIN ===== */
+main {
+    padding: 20px;
+}
+
+/* ===== TITULOS ===== */
+h2, h3 {
+    color: var(--primary);
+    margin-top: 0;
+}
+
+/* ===== FLASH / MENSAJES ===== */
+.flash {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-left: 5px solid var(--primary);
+    border-radius: 4px;
+}
+
+/* ===== TABLAS ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-bottom: 25px;
+}
+
+th, td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+    text-align: center;
+}
+
+th {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-weight: bold;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+td.acciones {
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* ===== BOTONES ===== */
+a.boton,
+button {
+    background: var(--primary);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-block;
+}
+
+    a.boton:hover,
+    button:hover {
+        background: var(--primary-dark);
+    }
+
+a.boton-rojo {
+    background: var(--primary-dark);
+}
+
+    a.boton-rojo:hover {
+        background: #7a0d2f;
+    }
+
+/* ===== LISTAS ===== */
+ul {
+    padding-left: 20px;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    text-align: center;
+    padding: 10px;
+    color: #777;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    th:nth-child(2),
+    td:nth-child(2) {
+        display: none;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+/* ===== LOGIN ===== */
+.login-body {
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 30px 35px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.login-logo {
+    max-width: 180px;
+    margin-bottom: 15px;
+}
+
+.login-container h2 {
+    color: #c51a52;
+    margin-bottom: 25px;
+}
+
+.login-form label {
+    display: block;
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 11px 12px;
+    margin-bottom: 18px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 11px; /* 👈 igual que inputs */
+    background-color: #c51a52;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .login-form button:hover {
+        background-color: #a51544;
+    }
+
+
+.admin-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+    .admin-menu a.boton {
+        text-align: center;
+        padding: 12px;
+        font-size: 15px;
+    }
+
+
+/* ===== FORMULARIOS ===== */
+.form-container {
+    max-width: 420px;
+    background: white;
+    padding: 25px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+}
+
+    .formulario label {
+        margin-top: 12px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .formulario input,
+    .formulario select {
+        margin-top: 6px;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+.acciones-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+    .acciones-form button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .acciones-form button:hover {
+            background: var(--primary-dark);
+        }
+
+.boton-secundario {
+    background: #ddd;
+    color: #333;
+    padding: 10px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+}
+
+    .boton-secundario:hover {
+        background: #ccc;
+    }
+
+td:last-child {
+    text-transform: capitalize;
+}
+
+footer p {
+    margin: 4px 0;
+}
+
+.info-clases {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 14px;
+}
+
+.fila-roja {
+    background-color: #fdeaea;
+}
+
+.acciones-masivas {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+    .acciones-masivas button {
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+
+.calendario {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+    .calendario th {
+        text-align: center;
+        padding: 10px;
+        background-color: #c51a52;
+        color: white;
+    }
+
+    .calendario td {
+        border: 1px solid #ddd;
+        height: 90px;
+        vertical-align: top;
+        padding: 5px;
+    }
+
+        .calendario td.vacio {
+            background-color: #f5f5f5;
+        }
+
+.numero-dia {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.sesion {
+    margin-top: 4px;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+    .sesion.asistira {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .sesion.cancelada {
+        background-color: #fdecea;
+        color: #c62828;
+    }
+
+    .sesion.recuperacion {
+        background-color: #e3f2fd;
+        color: #1565c0;
+    }
+
+.estado {
+    display: block;
+    font-size: 11px;
+}
+
+.btn-cancelar {
+    background: #fdecea;
+    color: #c62828;
+    border: none;
+    padding: 4px;
+    font-size: 11px;
+    width: 100%;
+}
+
+.btn-recuperar {
+    background: #e3f2fd;
+    color: #1565c0;
+    border: none;
+    padding: 4px;
+    font-size: 11px;
+    width: 100%;
+}
+

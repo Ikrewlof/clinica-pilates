@@ -1,0 +1,81 @@
+﻿{% extends "base.html" %}
+{% block title %}Mi perfil{% endblock %}
+
+{% block content %}
+
+<h2>Hola, {{ resumen.nombre }} 👋</h2>
+<p class="info-clases">
+    Mes de {{ mes_literal }} de {{ year }}
+</p>
+
+<!-- ===== TARJETAS ===== -->
+<div class="admin-menu">
+
+    <!-- CLASES -->
+    <div class="form-container">
+        <h3>📅 Clases</h3>
+        <p>
+            <strong>{{ resumen.clases_semana }}</strong> clases / semana
+        </p>
+        <a href="/usuario/clases" class="boton">
+            Ver mis clases
+        </a>
+    </div>
+
+    <!-- RECUPERACIONES -->
+    <div class="form-container">
+        <h3>🔁 Recuperaciones</h3>
+        <p>
+            Disponibles:
+            <strong>{{ resumen.recuperaciones }}</strong>
+        </p>
+
+        {% if resumen.recuperaciones > 0 %}
+        <a href="/usuario/recuperaciones" class="boton">
+            Gestionar
+        </a>
+        {% else %}
+        <span class="info-clases">No tienes recuperaciones</span>
+        {% endif %}
+    </div>
+
+    <!-- PAGO -->
+    <div class="form-container">
+        <h3>💳 Pago</h3>
+        <p>
+            Cuota: <strong>{{ resumen.cuota }} €</strong>
+            {% if resumen.pagado %}
+            <span style="color: green;">✅ Pagado</span>
+            {% else %}
+            <span style="color: red;">❌ Pendiente</span>
+            {% endif %}
+        </p>
+        <a href="/usuario/pagos" class="boton">
+            Ver pagos
+        </a>
+    </div>
+
+    <!-- CONTRASEÑA-->
+    <!-- RECUPERACIONES -->
+    <div class="form-container">
+        <h3>🔐 Seguridad</h3>
+        <p>Cambia tu contraseña de acceso</p>
+        <a href="/usuario/password" class="boton">
+            Cambiar contraseña
+        </a>
+    </div>
+
+
+
+</div>
+
+<hr>
+
+<!-- ===== ACCIONES ===== -->
+<div class="acciones-form">
+    <a href="/" class="boton-secundario">
+        Cerrar sesión
+    </a>
+</div>
+
+{% endblock %}

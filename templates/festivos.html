@@ -1,0 +1,67 @@
+﻿{% extends "base.html" %}
+{% block title %}Festivos{% endblock %}
+
+{% block content %}
+
+<h2>Festivos</h2>
+
+<div class="flash">
+    ⚠️ Los festivos cuentan como clase dada, no se pueden recuperar
+    y se marcarán automáticamente en el calendario del usuario.
+</div>
+
+<div class="form-container">
+    <form method="post" class="formulario">
+
+        <label for="fecha">Fecha</label>
+        <input type="date" name="fecha" id="fecha" required>
+
+        <label for="motivo">Motivo</label>
+        <input type="text"
+               name="motivo"
+               id="motivo"
+               placeholder="Ej: Fiesta local, Navidad…">
+
+        <div class="acciones-form">
+            <button type="submit">➕ Añadir festivo</button>
+            <a href="/admin" class="boton-secundario">Cancelar</a>
+        </div>
+
+    </form>
+</div>
+
+{% if festivos %}
+<h3 style="margin-top:30px;">Festivos registrados</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Motivo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fecha, motivo in festivos %}
+        <tr>
+            <td>{{ fecha }}</td>
+            <td>{{ motivo or "—" }}</td>
+            <td class="acciones">
+                <form method="post"
+                      action="/admin/festivos/eliminar/{{ fecha }}"
+                      onsubmit="return confirm('¿Eliminar este festivo?')">
+                    <button class="btn-quitar">❌</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<p class="info-clases">No hay festivos registrados.</p>
+{% endif %}
+
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+
+{% endblock %}

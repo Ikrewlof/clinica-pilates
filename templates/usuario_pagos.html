@@ -1,0 +1,47 @@
+﻿{% extends "base.html" %}
+{% block title %}Mis pagos{% endblock %}
+
+{% block content %}
+
+<h2>Mis pagos</h2>
+
+<div class="form-container">
+
+    {% if pagos %}
+    <table>
+        <tr>
+            <th>Mes</th>
+            <th>Cuota</th>
+            <th>Estado</th>
+            <th>Fecha pago</th>
+        </tr>
+
+        {% for year, month, cuota, pagado, fecha in pagos %}
+        {% set f = fecha | replace("-", "/") %}
+        <tr>
+            <td>{{ "%02d"|format(month) }}/{{ year }}</td>
+            <td>{{ cuota }} €</td>
+            <td>
+                {% if pagado %}
+                <span style="color: green; font-weight: bold;">✅ Pagado</span>
+                {% else %}
+                <span style="color: red; font-weight: bold;">❌ Pendiente</span>
+                {% endif %}
+            </td>
+            <td>{{ f[8:10] }}/{{ f[5:7] }}/{{ f[0:4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class="info-clases">No hay pagos registrados.</p>
+    {% endif %}
+
+</div>
+
+<br>
+
+<a href="/usuario" class="boton">
+    ⬅ Volver
+</a>
+
+{% endblock %}

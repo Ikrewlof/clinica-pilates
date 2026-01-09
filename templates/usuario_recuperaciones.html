@@ -1,0 +1,89 @@
+﻿{% extends "base.html" %}
+{% block title %}Generar clases del mes{% endblock %}
+
+{% block content %}
+
+<h2>Recuperaciones</h2>
+
+<p>
+    Recuperaciones disponibles:
+    <strong>{{ recuperaciones }}</strong>
+</p>
+
+    {% if calendario %}
+
+<!-- Cabecera -->
+<div class="calendar-header">
+    <div>Lunes</div>
+    <div>Martes</div>
+    <div>Miércoles</div>
+    <div>Jueves</div>
+    <div>Viernes</div>
+</div>
+
+<div class="calendar">
+
+    <!-- Huecos antes del día 1 -->
+    {% for i in range(calendario.offset) %}
+    <div class="day empty"></div>
+    {% endfor %}
+
+    <!-- Días del mes -->
+    {% for dia in calendario.dias %}
+    {% if dia.dia_semana < 5 %} {# Solo lunes-viernes #}
+
+    <div class="day {% if not dia.clases %}sin-clases{% endif %}">
+
+        <div class="day-header">
+            <span class="day-number">{{ dia.dia_num }}</span>
+        </div>
+
+        <div class="events">
+            {% for clase in dia.clases %}
+            <div class="event">
+
+                <div class="event-title">
+                    {{ clase.descripcion }}
+                </div>
+
+                <div class="event-time">
+                    {{ clase.hora }}
+                    ({{ clase.ocupacion }}/{{ clase.capacidad }})
+                </div>
+
+                {% if recuperaciones > 0 %}
+                <form method="post" action="/usuario/recuperaciones/apuntar">
+                    <input type="hidden" name="clase_id" value="{{ clase.id }}">
+                    <button type="submit"
+                            onclick="return confirm('¿Apuntarte a esta clase?')">
+                        ➕ Apuntarme
+                    </button>
+                </form>
+                {% else %}
+                <div class="event-note">
+                    Sin recuperaciones disponibles
+                </div>
+                {% endif %}
+
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    {% endif %}
+    {% endfor %}
+
+</div>
+
+    {% else %}
+<p>No tienes clases disponibles en este momento.</p>
+    {% endif %}
+
+<br>
+<a href="/usuario" class="boton boton-secundario">
+    ⬅ Volver
+</a>
+
+{% endblock %}
+

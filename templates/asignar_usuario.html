@@ -1,0 +1,64 @@
+﻿{% extends "base.html" %}
+{% block title %}Asignar clases{% endblock %}
+
+{% block content %}
+
+<h2>Asignar clases a {{ usuario[1] }}</h2>
+
+<p class="info-clases">
+    Máximo <strong>{{ usuario[3] }}</strong> clases por semana
+</p>
+
+{% set dias = {
+    0: "Lunes",
+    1: "Martes",
+    2: "Miércoles",
+    3: "Jueves",
+    4: "Viernes",
+    5: "Sábado",
+    6: "Domingo"
+} %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Asignar</th>
+            <th>Día</th>
+            <th>Hora</th>
+            <th>Descripción</th>
+            <th>Ocupación</th>
+            <th>Capacidad</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for c in clases %}
+        <tr class="{% if c[4] >= c[5] and c[0] not in asignadas %}fila-roja{% endif %}">
+            <td class="acciones">
+                <form method="post" style="margin:0">
+                    <input type="hidden" name="clase_id" value="{{ c[0] }}">
+
+                    <input type="checkbox"
+                           name="checked"
+                           onchange="this.form.submit()"
+                           {% if c[0] in asignadas %}checked{% endif %}
+                           {% if c[4]>= c[5] and c[0] not in asignadas %}disabled{% endif %}>
+                </form>
+            </td>
+
+            <td>{{ dias[c[1]] }}</td>
+            <td>{{ c[2] }}</td>
+            <td>{{ c[3] }}</td>
+            <td>{{ c[4] }}</td>
+            <td>{{ c[5] }}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+<div class="acciones-form">
+    <a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+</div>
+
+{% endblock %}

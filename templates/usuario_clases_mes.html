@@ -1,0 +1,88 @@
+﻿{% extends "base.html" %}
+{% block title %}Generar clases del mes{% endblock %}
+
+{% block content %}
+
+<h2>Mis clases del mes</h2>
+
+    {% if calendario %}
+
+<div class="calendar-header">
+    <div>Lunes</div>
+    <div>Martes</div>
+    <div>Miércoles</div>
+    <div>Jueves</div>
+    <div>Viernes</div>
+</div>
+
+<div class="calendar">
+
+    {# Huecos antes del día 1 #}
+    {% for i in range(calendario[0].dia_semana_num) %}
+    <div class="day empty"></div>
+    {% endfor %}
+
+
+    {% for dia in calendario %}
+    {% if dia.dia_semana not in ['Sábado', 'Domingo'] %}
+    <div class="day {% if dia.es_hoy %}hoy{% endif %}">
+
+        <div class="day-header">
+            <span class="day-number">{{ dia.dia_num }}</span>
+        </div>
+
+        <div class="events">
+            {% for clase in dia.clases %}
+            <div class="event
+                {% if clase.es_festivo %}festivo{% endif %}
+                {% if not clase.puede_borrarse %}bloqueado{% endif %}
+            ">
+
+                <div class="event-title">
+                    {{ clase.descripcion }}
+                </div>
+
+                <div class="event-time">
+                    {{ clase.hora }}
+                </div>
+
+                {% if clase.es_festivo %}
+                <div class="event-note">
+                    🎉 Día Festivo - No hay clase 🎉
+                </div>
+
+                {% elif not clase.puede_borrarse %}
+                <div class="event-note">
+                    No puede darse de baja de esta clase con menos de 12h
+                </div>
+
+                {% else %}
+                <form method="post" action="/usuario/clase/baja">
+                    <input type="hidden" name="clase_id" value="{{ clase.id }}">
+                    <button type="submit"
+                            onclick="return confirm('¿Seguro que quieres darte de baja de esta clase?')">
+                        ❌ Darse de baja de esta clase
+                    </button>
+                </form>
+                {% endif %}
+
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endif %}
+    {% endfor %}
+
+</div>
+
+    {% else %}
+<p>No tienes clases este mes.</p>
+    {% endif %}
+
+<br>
+<a href="/usuario" class="boton boton-secundario">
+    ⬅ Volver
+</a>
+
+{% endblock %}

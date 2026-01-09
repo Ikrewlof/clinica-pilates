@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Pilates{% endblock %}</title>
+    <link rel="stylesheet" href="/static/estilo.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo">
+            <h1>Pilates Garval</h1>
+        </div>
+
+        {% if session.nombre %}
+        <div class="usuario">
+            {{ session.nombre }} |
+            <a href="/">Salir</a>
+        </div>
+        {% endif %}
+    </header>
+
+
+    <main>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flash">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p><small>© Fisioterapia Garval - Centro de Salud y Bienestar</small></p>
+        <p><small>Av. de María Zambrano, 4, 28903 Getafe, Madrid</small></p>
+        <p><small>info@clinicagarval.com</small></p>
+        <p><small>640 125 135</small></p>
+    </footer>
+
+</body>
+</html>

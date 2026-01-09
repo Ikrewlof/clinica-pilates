@@ -1,0 +1,42 @@
+﻿{% extends "base.html" %}
+{% block title %}Asignar clases fijas{% endblock %}
+
+{% block content %}
+
+<h2>Asignar clases fijas</h2>
+
+<p class="info-clases">
+    Selecciona un usuario para asignarle sus clases semanales fijas.
+</p>
+
+{% if usuarios %}
+<table>
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Clases / semana</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in usuarios %}
+        <tr>
+            <td>{{ u[1] }}</td>
+            <td>{{ u[2] }}</td>
+            <td class="acciones">
+                <a class="boton"
+                   href="/admin/asignaciones/{{ u[0] }}">
+                    Asignar
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No hay usuarios disponibles.</p>
+{% endif %}
+
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+
+{% endblock %}

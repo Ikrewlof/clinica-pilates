@@ -1,0 +1,112 @@
+﻿{% extends "base.html" %}
+{% block title %}Clases base{% endblock %}
+
+{% block content %}
+<h2>Clases base (horarios)</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+<p class="mensaje {{ category }}">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<section class="bloque">
+    <h3>Crear clase base</h3>
+
+    <form method="post" class="formulario">
+        <div class="campo">
+            <label>Día</label>
+            <select name="dia_semana">
+                <option value="0">Lunes</option>
+                <option value="1">Martes</option>
+                <option value="2">Miércoles</option>
+                <option value="3">Jueves</option>
+                <option value="4">Viernes</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Hora</label>
+            <input type="time"
+                   name="hora"
+                   min="09:00"
+                   max="21:00"
+                   step="1800"
+                   required>
+        </div>
+
+        <div class="campo">
+            <label>Capacidad</label>
+            <input type="number" name="capacidad" value="4" required>
+        </div>
+
+        <div class="campo">
+            <label>Descripción</label>
+            <input type="text" name="descripcion" required>
+        </div>
+        <br />
+        <div class="boton">
+            <button type="submit" class="boton boton-pequeno">Crear clase</button>
+        </div>
+    </form>
+</section>
+
+<section class="bloque">
+    <h3>Clases existentes</h3>
+
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>Día</th>
+                <th>Hora</th>
+                <th>Descripción</th>
+                <th>Ocupación</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for id, dia_semana, hora, descripcion, ocupacion, capacidad, activa in clases %}
+            <tr>
+                <td>{{ dias[dia_semana] }}</td>
+                <td>{{ hora }}</td>
+                <td>{{ descripcion }}</td>
+                <td>{{ ocupacion }} / {{ capacidad }}</td>
+                <td>
+                    {% if activa %}
+                   ✅ Activa
+                    {% else %}
+                    ❌ Inactiva
+                    {% endif %}
+                </td>
+                <td>
+                    {% if activa %}
+                    <form method="post"
+                          action="/admin/clases_base/desactivar/{{ id }}"
+                          style="display:inline;">
+                        <button class="boton boton-peligro"
+                                onclick="return confirm('¿Desactivar esta clase base?')">
+                            Desactivar
+                        </button>
+                    </form>
+                    {% else %}
+                    <form method="post"
+                          action="/admin/clases_base/activar/{{ id }}"
+                          style="display:inline;">
+                        <button class="boton boton-secundario">
+                            Activar
+                        </button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<a href="/admin" class="boton boton-secundario">⬅ Volver</a>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+﻿{% extends "base.html" %}
+{% block title %}Recuperaciones pendientes{% endblock %}
+
+{% block content %}
+
+<h2>Recuperaciones pendientes mes activo {{ mes_literal }} {{ year }}</h2>
+
+{% if pendientes %}
+
+<table>
+    <tr>
+        <th>Usuario</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Acción</th>
+    </tr>
+
+    {% for id, nombre, fecha, hora in pendientes %}
+
+    {# convertir string a fecha #}
+    {% set f = fecha | replace("-", "/") %}
+
+    <tr>
+        <td>{{ nombre }}</td>
+        <td>{{ f[8:10] }}/{{ f[5:7] }}/{{ f[0:4] }}</td>
+        <td>{{ hora }}</td>
+        <td class="acciones">
+            <a href="/admin/recuperaciones/asignar/{{ id }}" class="boton">
+                Asignar
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p class="info-clases">
+    🎉 No hay recuperaciones pendientes en el mes activo
+</p>
+{% endif %}
+
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+
+{% endblock %}

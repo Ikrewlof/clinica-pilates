@@ -1,0 +1,77 @@
+﻿{% extends "base.html" %}
+{% block title %}Usuarios{% endblock %}
+
+{% block content %}
+<h2>Gestión de usuarios</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+<div class="flash">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Clases / semana</th>
+        <th>Acciones</th>
+    </tr>
+
+    {% for u in usuarios %}
+    <tr>
+        <form method="post" action="/admin/usuarios/editar/{{ u[0] }}">
+        <td>
+            <input type="text" name="nombre" value="{{ u[1] }}" required>
+        </td>
+
+        <td>{{ u[2] }}</td>
+
+        <td>
+            <select name="rol">
+                <option value="usuario" {% if u[3]=="usuario" %}selected{% endif %}>
+                    Usuario
+                </option>
+
+                <option value="admin" {% if u[3]=="admin" %}selected{% endif %}>
+                    Admin
+                </option>
+
+           
+        </td>
+
+        <td>
+            <select name="clases_semana">
+                <option value="0" {% if u[4]==0 %}selected{% endif %}>0</option>
+                <option value="1" {% if u[4]==1 %}selected{% endif %}>1</option>
+                <option value="2" {% if u[4]==2 %}selected{% endif %}>2</option>
+            </select>
+        </td>
+
+        <td class="acciones">
+            <button type="submit">💾 Guardar</button>
+            </form>
+
+            <form method="post"
+                  action="/admin/usuarios/{{ u[0] }}/password"
+                  style="display:inline;">
+                <button type="submit">🔐 Password</button>
+            </form>
+
+            <form method="post"
+                  action="/admin/usuarios/eliminar/{{ u[0] }}"
+                  style="display:inline;"
+                  onsubmit="return confirm('¿Eliminar este usuario definitivamente?');">
+                <button class="boton-rojo">🗑</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<a href="/admin" class="boton boton-secundario">⬅ Volver</a>
+{% endblock %}

@@ -1,0 +1,34 @@
+﻿{% extends "base.html" %}
+{% block title %}Panel administración{% endblock %}
+
+{% block content %}
+<h2>Panel de administración</h2>
+<p>Bienvenid@, <strong>{{ session.nombre }}</strong></p>
+
+
+ {% with messages = get_flashed_messages(with_categories=true) %}
+ {% if messages %}
+ {% for category, message in messages %}
+<p style="color: green; font-weight: bold;">{{ message }}</p>
+ {% endfor %}
+ {% endif %}
+ {% endwith %}
+
+<div class="admin-menu">
+    <a class="boton" href="/admin/mes_activo">Mes Activo</a>
+    <a class="boton" href="/admin/clases_base">Crear clases base</a>
+    <a class="boton" href="/admin/generar_mes">Generar clases del mes</a>
+    <a class="boton" href="/admin/clases_mes">Ver clases del mes</a>
+    <a class="boton" href="/admin/festivos">Marcar Festivos</a>
+    <a class="boton" href="/admin/asignaciones">Asignar clases fijas</a>
+    <a class="boton" href="/admin/recuperaciones">Recuperaciones</a>
+    <a class="boton" href="/admin/usuarios/nuevo">Crear usuario</a>
+    <a class="boton" href="/admin/usuarios">Gestionar usuarios</a>
+    <a class="boton" href="/admin/pagos">Control de pagos</a>
+    <a class="boton" href="/admin/pagos/historico">Histórico de pagos</a>
+
+</div>
+
+{% endblock %}
+
+

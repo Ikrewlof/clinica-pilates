@@ -1,0 +1,35 @@
+﻿{% extends "base.html" %}
+{% block title %}Generar clases del mes{% endblock %}
+
+{% block content %}
+
+<h2>Generar clases del mes</h2>
+
+<p>
+    Se generarán automáticamente todas las clases del mes seleccionado
+    a partir de las clases base activas.
+</p>
+
+<form method="post" action="/admin/generar_mes" class="formulario">
+
+    <div class="form-grupo">
+        <label for="mes">Mes a generar</label>
+        <input type="month"
+               id="mes"
+               name="mes"
+               value="{{ mes_activo }}"
+               required>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button type="submit" class="boton">
+            ⚙️ Generar mes
+        </button>
+
+        <a href="/admin" class="boton boton-secundario">
+            ⬅ Volver
+        </a>
+    </div>
+</form>
+
+{% endblock %}

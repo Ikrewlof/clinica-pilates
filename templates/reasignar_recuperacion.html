@@ -1,0 +1,58 @@
+﻿{% extends "base.html" %}
+{% block title %}Reasignar recuperacion{% endblock %}
+
+{% block content %}
+
+<h2>Reasignar recuperación</h2>
+<p><strong>Usuario:</strong> {{ nombre }}</p>
+
+<div class="calendar-header">
+    <div>Lunes</div>
+    <div>Martes</div>
+    <div>Miércoles</div>
+    <div>Jueves</div>
+    <div>Viernes</div>
+</div>
+
+<div class="calendar">
+
+    {% for i in range(primer_dia_semana) %}
+    <div class="day empty"></div>
+    {% endfor %}
+
+    {% for dia in dias_mes %}
+    <div class="day">
+
+        <div class="day-header">
+            <span class="day-number">{{ dia.dia_num }}</span>
+        </div>
+
+        <div class="events">
+            {% for clase in dia.clases %}
+            <div class="event">
+                <div class="event-title">{{ clase.descripcion }}</div>
+                <div class="event-time">{{ clase.hora }}</div>
+
+                <form method="post" action="/admin/recuperaciones/confirmar">
+                    <input type="hidden" name="recuperacion_id" value="{{ recuperacion_id }}">
+                    <input type="hidden" name="usuario_id" value="{{ usuario_id }}">
+                    <input type="hidden" name="clase_id" value="{{ clase.id }}">
+                    <button type="submit"
+                            onclick="return confirm('¿Asignar a esta clase?')">
+                        Asignar
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+<br>
+<a href="/admin" class="boton boton-secundario">
+    ⬅ Volver
+</a>
+
+{% endblock %}

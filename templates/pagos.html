@@ -1,0 +1,63 @@
+﻿{% extends "base.html" %}
+{% block title %}Control de pagos{% endblock %}
+
+{% block content %}
+
+<h2>Control de pagos - Mes activo actual: {{ mes_literal }} {{ year }}</h2>
+
+<table>
+    <tr>
+        <th>Usuario</th>
+        <th>Clases / semana</th>
+        <th>Cuota</th>
+        <th>Estado del pago</th>
+        <th class="acciones">Acción</th>
+    </tr>
+
+    {% for id, nombre, clases_semana, pagado in usuarios %}
+    <tr class="{% if not pagado %}fila-roja{% endif %}">
+        <td>{{ nombre }}</td>
+
+        <td>{{ clases_semana }}</td>
+
+        <td>
+            {% if clases_semana|int == 1 %}
+            55 €
+            {% else %}
+            90 €
+            {% endif %}
+        </td>
+
+        <td>
+            {% if pagado %}
+            ✅ Pagado
+            {% else %}
+            ❌ Pendiente
+            {% endif %}
+        </td>
+
+        <td class="acciones">
+            <form method="post"
+                  action="/admin/pagos/toggle/{{ id }}"
+                  {% if pagado %}
+                  onsubmit="return confirm('¿Seguro que quieres marcar este pago como IMPAGO?')"
+                  {% endif %}>
+
+                <button {% if pagado %}
+                        class="boton-rojo"
+                        {% endif %}>
+                    {% if pagado %}
+                    Marcar impago
+                    {% else %}
+                    Marcar pagado
+                    {% endif %}
+                </button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+
+{% endblock %}

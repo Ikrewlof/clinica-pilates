@@ -1,0 +1,61 @@
+﻿{% extends "base.html" %}
+{% block title %}Histórico de pagos{% endblock %}
+
+{% block content %}
+
+<h2>Histórico de pagos</h2>
+
+<form method="get" class="selector-mes">
+    <label>Mes:</label>
+
+    <input type="month"
+           name="mes"
+           value="{% if year and month %}{{ '%04d-%02d'|format(year, month) }}{% endif %}">
+
+    <button type="submit">Filtrar</button>
+
+   
+</form>
+
+<table>
+    <tr>
+        <th>Usuario</th>
+        <th>Mes</th>
+        <th>Año</th>
+        <th>Cuota</th>
+        <th>Estado</th>
+        <th>Fecha de pago</th>
+    </tr>
+
+    {% for id, nombre, year, month, cuota, pagado, fecha in pagos %}
+    <tr class="{% if not pagado %}fila-roja{% endif %}">
+        <td>{{ nombre }}</td>
+
+        <td>{{ mes_literal }}</td>
+            
+        <td>{{ year }}</td>
+
+        <td>{{ cuota }} €</td>
+
+        <td>
+            {% if pagado %}
+            ✅ Pagado
+            {% else %}
+            ❌ Pendiente
+            {% endif %}
+        </td>
+
+        <td>{{ fecha or "—" }}</td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="5" style="text-align:center; font-style:italic;">
+            No hay pagos para este filtro
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+
+{% endblock %}
