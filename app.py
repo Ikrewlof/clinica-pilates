@@ -229,7 +229,8 @@ def admin_recuperaciones():
            r.id,
            u.nombre,
            c.fecha,
-           c.hora
+           c.hora,
+           r.especial
         FROM recuperaciones r
         JOIN usuarios u ON u.id = r.usuario_id
         JOIN clases c ON c.id = r.clase_original_id
@@ -1517,6 +1518,128 @@ def usuario_apuntar_recuperacion():
 
     flash("Clase asignada correctamente", "success")
     return redirect("/usuario")
+
+
+
+#crear una clase manual
+@app.route("/admin/clases_manual", methods=["GET", "POST"])
+def admin_crear_clase_manual():
+    if session.get("rol") != "admin":
+        abort(403)
+
+    conn = conectar()
+    c = conn.cursor()
+
+    if request.method == "POST":
+        fecha = request.form["fecha"]        # YYYY-MM-DD
+        hora = request.form["hora"]          # HH:MM
+        descripcion = request.form["descripcion"]
+        capacidad = int(request.form["capacidad"])
+
+        # 🔒 1. Comprobar si ya existe clase ese día y hora
+        existe = c.execute("""
+            SELECT 1 FROM clases
+            WHERE fecha = ? AND hora = ?
+        """, (fecha, hora)).fetchone()
+
+        if existe:
+            conn.close()
+            flash("Ya existe una clase ese día a esa hora", "error")
+            return redirect(url_for("admin_crear_clase_manual"))
+
+        # 2️⃣ Insertar clase
+        c.execute("""
+            INSERT INTO clases (
+                fecha, hora, descripcion, capacidad, es_festivo
+            ) VALUES (?, ?, ?, ?, 0)
+        """, (fecha, hora, descripcion, capacidad))
+
+        conn.commit()
+        conn.close()
+
+        flash("Clase creada correctamente", "success")
+        return redirect(url_for("admin_clases_mes"))
+
+    conn.close()
+    return render_template("admin_clase_manual.html")
+
+
+#insertar recuperacion manualmente
+
+
+@app.route("/admin/recuperaciones_nueva", methods=["GET"])
+def nueva_recuperacion():
+
+    conn = conectar()
+    c = conn.cursor()
+
+    c.execute("""
+        SELECT id, nombre
+        FROM usuarios
+        WHERE rol = 'usuario'
+        ORDER BY nombre
+    """)
+    usuarios = c.fetchall()
+
+    conn.close()
+
+    return render_template(
+        "recuperacion_nueva.html",
+        usuarios=usuarios
+    )
+
+
+
+@app.route("/admin/recuperaciones_nueva", methods=["POST"])
+def guardar_recuperacion():
+    if session.get("rol") != "admin":
+        abort(403)
+
+    usuario_id = request.form["id_usuario"]
+
+    
+
+    conn = conectar()
+    c = conn.cursor()
+
+    year, month = obtener_mes_activo()
+
+    # 1️⃣ Obtener primera clase del mes activo
+    clase = c.execute("""
+        SELECT id, fecha
+        FROM clases
+        WHERE fecha LIKE ?
+        ORDER BY fecha ASC
+        LIMIT 1
+    """, (f"{year}-{month:02d}%",)).fetchone()
+
+    if not clase:
+       conn.close()
+       flash("No hay clases en el mes activo", "error")
+       return redirect("/admin/recuperaciones_nueva")
+
+    clase_id, fecha_clase = clase
+
+
+
+    # 2️⃣ Insertar recuperación
+    c.execute("""
+        INSERT INTO recuperaciones (
+            usuario_id,
+           clase_original_id,
+            fecha_clase,
+            fecha_creacion,
+            asignada,
+            especial
+        ) VALUES (?, ?, ?, DATE('now'), 0,1)
+    """, (usuario_id, clase_id, fecha_clase))
+
+    conn.commit()
+    conn.close()
+
+    flash("Recuperación añadida correctamente", "success")
+    return redirect("/admin/recuperaciones")
+
 
 
 

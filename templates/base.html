@@ -2,7 +2,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Pilates{% endblock %}</title>
+    <title>{% block title %}Pilates Garval{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
     <link rel="stylesheet" href="/static/estilo.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -43,6 +45,22 @@
         <p><small>info@clinicagarval.com</small></p>
         <p><small>640 125 135</small></p>
     </footer>
+    <script>
+function toggleNormas() {
+    const contenido = document.getElementById("contenido-normas");
+    const flecha = document.getElementById("flecha-normas");
+
+    if (!contenido) return;
+
+    if (contenido.style.display === "none" || contenido.style.display === "") {
+        contenido.style.display = "block";
+        flecha.textContent = "▲";
+    } else {
+        contenido.style.display = "none";
+        flecha.textContent = "▼";
+    }
+}
+    </script>
 
 </body>
 </html>

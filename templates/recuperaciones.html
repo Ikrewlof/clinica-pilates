@@ -5,6 +5,11 @@
 
 <h2>Recuperaciones pendientes mes activo {{ mes_literal }} {{ year }}</h2>
 
+<div class="acciones-superior">
+    <a href="/admin/recuperaciones_nueva" class="boton">Añadir recuperación a un usuario
+    </a>
+</div>
+<br />
 {% if pendientes %}
 
 <table>
@@ -13,9 +18,10 @@
         <th>Fecha</th>
         <th>Hora</th>
         <th>Acción</th>
+        <th>Especial</th>
     </tr>
 
-    {% for id, nombre, fecha, hora in pendientes %}
+    {% for id, nombre, fecha, hora, especial in pendientes %}
 
     {# convertir string a fecha #}
     {% set f = fecha | replace("-", "/") %}
@@ -29,6 +35,7 @@
                 Asignar
             </a>
         </td>
+        <td>{% if especial == 1 %}especial{% endif %}</td>
     </tr>
     {% endfor %}
 </table>

@@ -594,3 +594,57 @@ footer p {
     width: 100%;
 }
 
+.admin-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.menu-bloque {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+    .menu-bloque h3 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        font-size: 1.05em;
+        color: #333;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+    }
+
+    .menu-bloque .boton {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+
+
+
+.contenido-normas p {
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.menu-bloque.normas {
+    width: 100%;
+    background: #fffbe6;
+    border-left: 5px solid #f0c36d;
+}
+
+.normas-wrapper {
+    margin: 30px 0;
+}
+
+
+.contenido-normas a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+    .contenido-normas a:hover {
+        text-decoration: underline;
+    }

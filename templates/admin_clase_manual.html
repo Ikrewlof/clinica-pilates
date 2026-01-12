@@ -1,0 +1,48 @@
+﻿{% extends "base.html" %}
+{% block title %}Crear clase puntual{% endblock %}
+
+{% block content %}
+<h2>➕ Crear clase en un día concreto</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+<div class="flash">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="form-container">
+    <form method="post" class="formulario">
+
+        <label>Fecha</label>
+        <input type="date" name="fecha" required>
+
+        <label>Hora</label>
+        <input type="time"
+               name="hora"
+               step="1800"
+               min="09:00"
+               max="21:00"
+               required>
+
+        <label>Descripción</label>
+        <input type="text"
+               name="descripcion"
+               placeholder="Pilates suelo, máquinas..."
+               required>
+
+        <label>Capacidad</label>
+        <input type="number"
+               name="capacidad"
+               min="1"
+               value="4"
+               required>
+
+        <div class="acciones-form">
+            <button type="submit">Crear clase</button>
+            <a href="/admin" class="boton-secundario">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

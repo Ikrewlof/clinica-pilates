@@ -3,79 +3,127 @@
 
 {% block content %}
 
-<h2>Hola, {{ resumen.nombre }} 👋</h2>
-<p class="info-clases">
+
+
+
+
+
+
+<!-- ===== NORMAS DEL CENTRO ===== -->
+<div class="normas-wrapper">
+
+    <div class="menu-bloque normas">
+        <h3>Hola, {{ resumen.nombre }} 👋</h3>
+
+        <div class="contenido-normas">
+
+            <p>
+                En <strong>Fisioterapia Garval. Centro de Salud y Bienestar</strong>, creemos que no solo trabajamos
+                el movimiento, trabajamos con personas. Por eso, nuestras clases de
+                <strong>pilates terapéutico</strong> se organizan en grupos muy reducidos
+                (máximo <strong>4 personas</strong>), cuidadosamente creados según niveles,
+                necesidades y patologías.
+            </p>
+
+            <p>
+                Cada alumn@ tiene asignado un <strong>día y una hora fija</strong>, ya que las sesiones
+                se diseñan específicamente para ese grupo.
+            </p>
+
+            <p>
+                👉 Por este motivo, los <strong>cambios de clase</strong> deben ser algo excepcional,
+                reservados para situaciones puntuales o de causa mayor, y siempre que exista
+                algún <strong>hueco libre</strong> en otro grupo compatible.
+            </p>
+            <br />
+            <p>
+                <br />
+                <strong>🔁 Recuperaciones de clase</strong><br></br>
+                Las recuperaciones solo pueden realizarse dentro del <strong>mes en curso</strong>.
+                Las clases no se acumulan ni se guardan para meses posteriores.
+            </p>
+
+            <p>
+                Este sistema nos permite mantener la <strong>calidad</strong>, <strong>seguridad</strong>
+                y <strong>personalización</strong> que definen nuestro trabajo y que hacen posible
+                una evolución real y cuidada.
+            </p>
+
+            <p>
+                Te agradecemos tu <strong>comprensión</strong> y <strong>colaboración</strong> para que
+                el grupo funcione de la mejor manera posible y todas las personas reciban la
+                atención que merecen. 💙
+            </p>
+            </br>
+            <p>
+                Para más información, puedes consultar los siguientes documentos:
+                <a href="/static/docs/Normas_Fisioterapia_Garval.pdf" target="_blank">
+                    <strong>Normas Fisioterapia Garval</strong>
+                </a>
+                y la
+                <a href="/static/docs/Festivos_y_cuota_mensual.pdf" target="_blank">
+                    <strong>Festivos y cuota mensual</strong>
+                </a>.
+            </p>
+
+        </div>
+    </div>
+
+</div>
+
+<h2>
     Mes de {{ mes_literal }} de {{ year }}
-</p>
+</h2>
 
 <!-- ===== TARJETAS ===== -->
 <div class="admin-menu">
 
-    <!-- CLASES -->
-    <div class="form-container">
+    <div class="menu-bloque">
         <h3>📅 Clases</h3>
         <p>
             <strong>{{ resumen.clases_semana }}</strong> clases / semana
         </p>
-        <a href="/usuario/clases" class="boton">
-            Ver mis clases
-        </a>
+        <a href="/usuario/clases" class="boton">Ver mis clases</a>
     </div>
 
-    <!-- RECUPERACIONES -->
-    <div class="form-container">
+    <div class="menu-bloque">
         <h3>🔁 Recuperaciones</h3>
         <p>
-            Disponibles:
-            <strong>{{ resumen.recuperaciones }}</strong>
+            Disponibles: <strong>{{ resumen.recuperaciones }}</strong>
         </p>
 
         {% if resumen.recuperaciones > 0 %}
-        <a href="/usuario/recuperaciones" class="boton">
-            Gestionar
-        </a>
+        <a href="/usuario/recuperaciones" class="boton">Gestionar</a>
         {% else %}
         <span class="info-clases">No tienes recuperaciones</span>
         {% endif %}
     </div>
 
-    <!-- PAGO -->
-    <div class="form-container">
+    <div class="menu-bloque">
         <h3>💳 Pago</h3>
         <p>
-            Cuota: <strong>{{ resumen.cuota }} €</strong>
+            Cuota: <strong>{{ resumen.cuota }} €</strong><br>
             {% if resumen.pagado %}
             <span style="color: green;">✅ Pagado</span>
             {% else %}
             <span style="color: red;">❌ Pendiente</span>
             {% endif %}
         </p>
-        <a href="/usuario/pagos" class="boton">
-            Ver pagos
-        </a>
+        <a href="/usuario/pagos" class="boton">Ver pagos</a>
     </div>
 
-    <!-- CONTRASEÑA-->
-    <!-- RECUPERACIONES -->
-    <div class="form-container">
+    <div class="menu-bloque">
         <h3>🔐 Seguridad</h3>
         <p>Cambia tu contraseña de acceso</p>
-        <a href="/usuario/password" class="boton">
-            Cambiar contraseña
-        </a>
+        <a href="/usuario/password" class="boton">Cambiar contraseña</a>
     </div>
-
-
 
 </div>
 
 <hr>
 
-<!-- ===== ACCIONES ===== -->
 <div class="acciones-form">
-    <a href="/" class="boton-secundario">
-        Cerrar sesión
-    </a>
+    <a href="/" class="boton-secundario">Cerrar sesión</a>
 </div>
 
 {% endblock %}
