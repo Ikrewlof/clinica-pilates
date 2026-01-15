@@ -1,4 +1,5 @@
-﻿from flask import Flask, render_template, request, redirect, session, abort, flash,url_for
+﻿from auth import login_required, role_required
+from flask import Flask, render_template, request, redirect, session, abort, flash,url_for
 from db import conectar
 from usuarios import validar_login,crear_usuario,obtener_usuarios, obtener_usuario_por_id,obtener_resumen_usuario
 from clases import generar_clases_mes_desde_base
@@ -21,13 +22,26 @@ import hashlib
 
 
 
+
+
 app = Flask(__name__)
 app.secret_key = "clave_secreta_clinica"
+
+
+
+@app.route("/debug-sesion")
+def debug_sesion():
+    return {
+        "user_id": session.get("user_id"),
+        "role": session.get("rol")
+    }
 
 
 @app.route("/", methods=["GET", "POST"])
 def login():
     error = None
+
+
 
     if request.method == "POST":
         user = validar_login(
@@ -51,15 +65,22 @@ def login():
 
 
 @app.route("/admin")
+@login_required
+@role_required("admin")
+
 def admin():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
+
+   
 
     return render_template("admin.html")
 
 #GENERAR MES
 
 @app.route("/admin/generar_mes", methods=["GET"])
+@login_required
+@role_required("admin")
 def admin_generar_mes():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -68,6 +89,8 @@ def admin_generar_mes():
 
 
 @app.route("/admin/generar_mes", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_generar_mes_post():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -84,6 +107,8 @@ def admin_generar_mes_post():
 #mes activo
 
 @app.route("/admin/mes_activo", methods=["GET", "POST"])
+@login_required
+@role_required("admin")
 def admin_mes_activo():
     if session.get("rol") != "admin":
         abort(403)
@@ -148,6 +173,8 @@ def obtener_mes_activo():
 #obtener las clases del mes
 
 @app.route("/admin/clases_mes")
+@login_required
+@role_required("admin")
 def admin_clases_mes():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -172,6 +199,8 @@ def admin_clases_mes():
 #quitar usuarios en el mes
 
 @app.route("/admin/clases_mes/quitar", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_quitar_usuario_clase():
     if session.get("rol") != "admin":
         abort(403)
@@ -209,6 +238,8 @@ def admin_quitar_usuario_clase():
 #recuperaciones 
 
 @app.route("/admin/recuperaciones")
+@login_required
+@role_required("admin")
 def admin_recuperaciones():
     if session.get("rol") != "admin":
         abort(403)
@@ -256,6 +287,8 @@ import calendar
 from datetime import date
 
 @app.route("/admin/recuperaciones/asignar/<int:recuperacion_id>")
+@login_required
+@role_required("admin")
 def admin_recuperaciones_asignar(recuperacion_id):
     if session.get("rol") != "admin":
         abort(403)
@@ -348,6 +381,8 @@ def admin_recuperaciones_asignar(recuperacion_id):
 
 
 @app.route("/admin/recuperaciones/confirmar", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_recuperaciones_confirmar():
     if session.get("rol") != "admin":
         abort(403)
@@ -401,6 +436,8 @@ from datetime import date
 from usuarios import obtener_usuarios_con_pagos
 
 @app.route("/admin/pagos")
+@login_required
+@role_required("admin")
 def admin_pagos():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -429,6 +466,8 @@ def admin_pagos():
 
 
 @app.route("/admin/pagos/toggle/<int:usuario_id>", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_toggle_pago(usuario_id):
     from datetime import date
     hoy = date.today()
@@ -479,6 +518,8 @@ def admin_toggle_pago(usuario_id):
 
 
 @app.route("/admin/pagos/historico")
+@login_required
+@role_required("admin")
 def admin_pagos_historico():
     if session.get("rol") != "admin":
         abort(403)
@@ -542,6 +583,8 @@ def admin_pagos_historico():
 
 
 @app.route("/usuario/pagos")
+@login_required
+@role_required("admin")
 def usuario_pagos():
     if session.get("rol") != "usuario":
         abort(403)
@@ -575,6 +618,8 @@ def usuario_pagos():
 
 
 @app.route("/admin/usuarios/nuevo")
+@login_required
+@role_required("admin")
 def admin_nuevo_usuario():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -582,6 +627,8 @@ def admin_nuevo_usuario():
     return render_template("crear_usuario.html")
 
 @app.route("/admin/usuarios/nuevo", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_nuevo_usuario_post():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -618,6 +665,8 @@ def admin_nuevo_usuario_post():
 
 
 @app.route("/admin/usuarios")
+@login_required
+@role_required("admin")
 def admin_usuarios():
     if session.get("rol") != "admin":
         abort(403)
@@ -639,6 +688,8 @@ def admin_usuarios():
     )
 
 @app.route("/admin/usuarios/editar/<int:usuario_id>", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_usuarios_editar(usuario_id):
     if session.get("rol") != "admin":
         abort(403)
@@ -663,6 +714,8 @@ def admin_usuarios_editar(usuario_id):
     return redirect("/admin/usuarios")
 
 @app.route("/admin/usuarios/eliminar/<int:usuario_id>", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_usuarios_eliminar(usuario_id):
     if session.get("rol") != "admin":
         abort(403)
@@ -706,6 +759,8 @@ def hash_password(password):
 
 
 @app.route("/admin/usuarios/<int:usuario_id>/password", methods=["GET", "POST"])
+@login_required
+@role_required("admin")
 def admin_cambiar_password(usuario_id):
     if session.get("rol") != "admin":
         abort(403)
@@ -768,6 +823,8 @@ def admin_cambiar_password(usuario_id):
 from clases import obtener_clases_base_con_ocupacion
 
 @app.route("/admin/clases_base")
+@login_required
+@role_required("admin")
 def admin_clases_base():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -784,6 +841,8 @@ def admin_clases_base():
 
 
 @app.route("/admin/clases_base", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_clases_base_post():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -813,6 +872,8 @@ def admin_clases_base_post():
 
 
 @app.route("/admin/festivos", methods=["GET", "POST"])
+@login_required
+@role_required("admin")
 def admin_festivos():
     if session.get("rol") != "admin":
         abort(403)
@@ -865,6 +926,8 @@ def admin_festivos():
 
 
 @app.route("/admin/festivos/eliminar/<fecha>", methods=["POST"])
+@login_required
+@role_required("admin")
 def eliminar_festivo(fecha):
     if session.get("rol") != "admin":
         abort(403)
@@ -900,6 +963,8 @@ def eliminar_festivo(fecha):
 # =========================
 
 @app.route("/admin/asignaciones")
+@login_required
+@role_required("admin")
 def admin_asignaciones():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -914,6 +979,8 @@ def admin_asignaciones():
 # =========================
 
 @app.route("/admin/asignaciones/<int:usuario_id>")
+@login_required
+@role_required("admin")
 def admin_asignar_usuario(usuario_id):
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -934,6 +1001,8 @@ def admin_asignar_usuario(usuario_id):
 # =========================
 
 @app.route("/admin/asignaciones/<int:usuario_id>", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_asignar_usuario_post(usuario_id):
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -999,6 +1068,8 @@ def admin_asignar_usuario_post(usuario_id):
 # =========================
 
 @app.route("/admin/asignaciones/<int:usuario_id>/quitar", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_quitar_asignacion(usuario_id):
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -1010,6 +1081,8 @@ def admin_quitar_asignacion(usuario_id):
     return redirect(f"/admin/asignaciones/{usuario_id}")
 
 @app.route("/admin/asignar_mes", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_asignar_mes():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -1023,6 +1096,8 @@ def admin_asignar_mes():
     return redirect("/admin")
 
 @app.route("/admin/clases_base/activar/<int:clase_id>", methods=["POST"])
+@login_required
+@role_required("admin")
 def activar_clase_base(clase_id):
     conn = conectar()
     c = conn.cursor()
@@ -1041,6 +1116,8 @@ def activar_clase_base(clase_id):
 
 
 @app.route("/admin/clases_base/desactivar/<int:clase_id>", methods=["POST"])
+@login_required
+@role_required("admin")
 def desactivar_clase_base(clase_id):
     conn = conectar()
     c = conn.cursor()
@@ -1063,6 +1140,8 @@ def desactivar_clase_base(clase_id):
 #borrar mes
 
 @app.route("/admin/clases_mes/borrar", methods=["POST"])
+@login_required
+@role_required("admin")
 def admin_borrar_clases_mes():
     if session.get("rol") != "admin":
         abort(403)
@@ -1523,6 +1602,8 @@ def usuario_apuntar_recuperacion():
 
 #crear una clase manual
 @app.route("/admin/clases_manual", methods=["GET", "POST"])
+@login_required
+@role_required("admin")
 def admin_crear_clase_manual():
     if session.get("rol") != "admin":
         abort(403)
@@ -1568,6 +1649,8 @@ def admin_crear_clase_manual():
 
 
 @app.route("/admin/recuperaciones_nueva", methods=["GET"])
+@login_required
+@role_required("admin")
 def nueva_recuperacion():
 
     conn = conectar()
@@ -1591,6 +1674,8 @@ def nueva_recuperacion():
 
 
 @app.route("/admin/recuperaciones_nueva", methods=["POST"])
+@login_required
+@role_required("admin")
 def guardar_recuperacion():
     if session.get("rol") != "admin":
         abort(403)
@@ -1644,4 +1729,4 @@ def guardar_recuperacion():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
