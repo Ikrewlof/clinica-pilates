@@ -648,3 +648,18 @@ footer p {
     .contenido-normas a:hover {
         text-decoration: underline;
     }
+
+.version-app {
+    background: #eef4ff;
+    border-left: 5px solid #5b8def;
+}
+
+.lista-version {
+    margin: 8px 0 0 18px;
+    padding: 0;
+}
+
+    .lista-version li {
+        margin-bottom: 6px;
+        font-size: 0.95em;
+    }
