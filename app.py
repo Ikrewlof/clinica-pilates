@@ -1,4 +1,5 @@
-﻿from auth import login_required, role_required
+﻿from asyncio.windows_events import NULL
+from auth import login_required, role_required
 from flask import Flask, render_template, request, redirect, session, abort, flash,url_for
 from db import conectar
 from usuarios import validar_login,crear_usuario,obtener_usuarios, obtener_usuario_por_id,obtener_resumen_usuario
@@ -186,11 +187,16 @@ def admin_clases_mes():
     else:
         year, month = obtener_mes_activo()
 
-    calendario = obtener_calendario_mes(year, month)
+    #calendario = obtener_calendario_mes(year, month)
+
+    calendario, offset = obtener_calendario_mes(year, month)
+  
+
 
     return render_template(
         "clases_mes.html",
         calendario=calendario,
+        offset=offset,
         year=year,
         month=month
     )
@@ -350,7 +356,10 @@ def admin_recuperaciones_asignar(recuperacion_id):
         })
 
     # 5️⃣ Construir mes completo
-    primer_dia_semana, total_dias = calendar.monthrange(year, month)
+    primer_dia_semana_full, total_dias = calendar.monthrange(year, month)
+
+    # offset para calendario L-V: si el día 1 es sábado/domingo, offset = 0 (empieza el lunes 2 en columna lunes)
+    primer_dia_semana = primer_dia_semana_full if primer_dia_semana_full < 5 else 0
     dias_mes = []
 
     for dia in range(1, total_dias + 1):
@@ -365,6 +374,7 @@ def admin_recuperaciones_asignar(recuperacion_id):
             "fecha": fecha,
             "dia_num": dia,
             "dia_semana": DIAS[fecha_obj.weekday()],
+            "weekday": fecha_obj.weekday(),
             "clases": clases_por_fecha.get(fecha, [])
         })
 
@@ -464,57 +474,73 @@ def admin_pagos():
         mes_literal=mes_literal
     )
 
+from datetime import date
+from flask import request, redirect, flash
 
 @app.route("/admin/pagos/toggle/<int:usuario_id>", methods=["POST"])
 @login_required
 @role_required("admin")
 def admin_toggle_pago(usuario_id):
-    from datetime import date
-    hoy = date.today()
+    hoy = date.today().isoformat()
+
+    year, month = obtener_mes_activo()  # ✅ mes activo real del sistema
+
+    cuota_str = (request.form.get("cuota") or "").strip()
+    metodo_pago = (request.form.get("metodo_pago") or "Tpv").strip()
+
+    if metodo_pago not in ("Tpv", "Efectivo"):
+        flash("Método de pago no válido", "error")
+        return redirect("/admin/pagos")
+
+    cuota_val = None
+    if cuota_str != "":
+        try:
+            cuota_val = float(cuota_str)
+            if cuota_val < 0:
+                raise ValueError()
+        except:
+            flash("Cuota no válida", "error")
+            return redirect("/admin/pagos")
 
     conn = conectar()
     c = conn.cursor()
 
-    clases_semana = c.execute("""
-         SELECT COUNT(DISTINCT clase_base_id)
-         FROM asignaciones_fijas
-         WHERE usuario_id = ?
-    """, (usuario_id,)).fetchone()[0]
-
-    if clases_semana == 1:
-        cuota = 55
-    elif clases_semana == 2:
-        cuota = 90
-    else:
-        cuota = 0
-
-
+    # 1) Asegurar que exista el registro del mes (si no existe)
+    #    (ajusta columnas si tu tabla tiene más campos obligatorios)
     c.execute("""
-         INSERT INTO pagos (usuario_id, year, month, pagado, cuota, fecha_pago)
-         VALUES (?, ?, ?, 1, ?, ?)
-         ON CONFLICT(usuario_id, year, month)
-         DO UPDATE SET
-             pagado = CASE pagos.pagado WHEN 1 THEN 0 ELSE 1 END,
-             cuota = CASE pagos.pagado
-               WHEN 1 THEN 0
-               ELSE excluded.cuota
-             END,
-             fecha_pago = CASE pagos.pagado
-                WHEN 1 THEN NULL
-                ELSE excluded.fecha_pago
-             END
-    """, (
-           usuario_id,
-           hoy.year,
-           hoy.month,
-           cuota,
-           hoy.isoformat()
-    ))
+        INSERT OR IGNORE INTO pagos (usuario_id, year, month, pagado, cuota, fecha_pago, metodo_pago)
+        VALUES (?, ?, ?, 0, NULL, NULL, 'Tpv')
+    """, (usuario_id, year, month))
+
+    # 2) Guardar cuota/método (si cuota está vacía, no pisamos la que hubiese)
+    if cuota_val is not None:
+        c.execute("""
+            UPDATE pagos
+            SET cuota = ?, metodo_pago = ?
+            WHERE usuario_id = ? AND year = ? AND month = ?
+        """, (cuota_val, metodo_pago, usuario_id, year, month))
+    else:
+        c.execute("""
+            UPDATE pagos
+            SET metodo_pago = ?
+            WHERE usuario_id = ? AND year = ? AND month = ?
+        """, (metodo_pago, usuario_id, year, month))
+
+    # 3) Toggle pagado/impago + fecha_pago
+    c.execute("""
+        UPDATE pagos
+        SET pagado = CASE WHEN pagado = 1 THEN 0 ELSE 1 END,
+            fecha_pago = CASE WHEN pagado = 1 THEN NULL ELSE ? END
+        WHERE usuario_id = ? AND year = ? AND month = ?
+    """, (hoy, usuario_id, year, month))
 
     conn.commit()
     conn.close()
 
     return redirect("/admin/pagos")
+
+
+
 
 
 @app.route("/admin/pagos/historico")
@@ -544,6 +570,24 @@ def admin_pagos_historico():
     conn = conectar()
     c = conn.cursor()
 
+
+    tot = c.execute("""
+    SELECT
+      COALESCE(SUM(COALESCE(p.cuota, 0)), 0) AS total_cuotas,
+      COALESCE(SUM(CASE WHEN p.pagado = 1 THEN COALESCE(p.cuota, 0) ELSE 0 END), 0) AS total_pagado,
+      COALESCE(SUM(CASE WHEN p.pagado = 1 AND p.metodo_pago = 'Tpv' THEN COALESCE(p.cuota, 0) ELSE 0 END), 0) AS total_tpv,
+      COALESCE(SUM(CASE WHEN p.pagado = 1 AND p.metodo_pago = 'Efectivo' THEN COALESCE(p.cuota, 0) ELSE 0 END), 0) AS total_efectivo
+    FROM pagos p
+    WHERE p.year = ? AND p.month = ?
+    """, (year, month)).fetchone()
+
+    resumen = {
+        "total_cuotas": tot[0],
+        "total_pagado": tot[1],
+        "total_tpv": tot[2],
+        "total_efectivo": tot[3],
+    }
+
     query = """
         SELECT
             p.id,
@@ -551,8 +595,9 @@ def admin_pagos_historico():
             p.year,
             p.month,
             p.cuota,
+            p.metodo_pago,
             p.pagado,
-            p.fecha_pago
+            p.fecha_pago            
         FROM pagos p
         JOIN usuarios u ON u.id = p.usuario_id
         WHERE 1=1 and pagado=1
@@ -577,7 +622,8 @@ def admin_pagos_historico():
         pagos=pagos,
         year=year,
         month=month,
-        mes_literal=mes_literal
+        mes_literal=mes_literal,
+        resumen=resumen
     )
 
 
@@ -664,6 +710,8 @@ def admin_nuevo_usuario_post():
 #gestionar usuarios admin
 
 
+from flask import request
+
 @app.route("/admin/usuarios")
 @login_required
 @role_required("admin")
@@ -671,21 +719,35 @@ def admin_usuarios():
     if session.get("rol") != "admin":
         abort(403)
 
+    estado = request.args.get("estado", "activos")  # activos | desactivados | todos
+
     conn = conectar()
     c = conn.cursor()
 
-    usuarios = c.execute("""
-        SELECT id, nombre, email, rol, clases_semana
+    sql = """
+        SELECT id, nombre, email, rol, clases_semana, desactivo
         FROM usuarios
-        ORDER BY nombre
-    """).fetchall()
+    """
+    params = ()
 
+    if estado == "activos":
+        sql += " WHERE desactivo = 0"
+    elif estado == "desactivados":
+        sql += " WHERE desactivo = 1"
+    else:
+        estado = "todos"  # por si llega algo raro
+
+    sql += " ORDER BY nombre"
+
+    usuarios = c.execute(sql, params).fetchall()
     conn.close()
 
     return render_template(
         "admin_usuarios.html",
-        usuarios=usuarios
+        usuarios=usuarios,
+        estado=estado
     )
+
 
 @app.route("/admin/usuarios/editar/<int:usuario_id>", methods=["POST"])
 @login_required
@@ -737,9 +799,6 @@ def admin_usuarios_eliminar(usuario_id):
     c.execute("DELETE FROM recuperaciones WHERE usuario_id = ?", (usuario_id,))
     conn.commit()
 
-    c.execute("DELETE FROM pagos WHERE usuario_id = ?", (usuario_id,))
-    conn.commit()
-
     c.execute("DELETE FROM usuarios WHERE id = ?", (usuario_id,))
     conn.commit()
 
@@ -749,6 +808,67 @@ def admin_usuarios_eliminar(usuario_id):
 
     flash("Usuario eliminado", "success")
     return redirect("/admin/usuarios")
+
+
+@app.route("/admin/usuarios/desactivar/<int:usuario_id>", methods=["POST"])
+@login_required
+@role_required("admin")
+def admin_usuarios_desactivar(usuario_id):
+    if session.get("rol") != "admin":
+        abort(403)
+
+    conn = conectar()
+    c = conn.cursor()
+        
+
+    #cuando desactive el usuario
+    c.execute("DELETE FROM asignaciones_fijas WHERE usuario_id = ?", (usuario_id,))
+    conn.commit()
+   
+
+    c.execute("DELETE FROM inscripciones WHERE usuario_id = ?", (usuario_id,))
+    conn.commit()
+    
+    c.execute("DELETE FROM recuperaciones WHERE usuario_id = ?", (usuario_id,))
+    conn.commit()
+
+
+    c.execute("update usuarios set desactivo=? WHERE id = ?", (1,usuario_id,))
+    conn.commit()
+
+
+    conn.close()
+
+
+    flash("Usuario desactivado", "success")
+    return redirect("/admin/usuarios")
+
+
+@app.route("/admin/usuarios/activar/<int:usuario_id>", methods=["POST"])
+@login_required
+@role_required("admin")
+def admin_usuarios_activar(usuario_id):
+    if session.get("rol") != "admin":
+        abort(403)
+
+    conn = conectar()
+    c = conn.cursor()
+        
+
+    #cuando desactive el usuario no hago nada, solo lo activo
+
+
+
+    c.execute("update usuarios set desactivo=? WHERE id = ?", (0,usuario_id,))
+    conn.commit()
+
+
+    conn.close()
+
+
+    flash("Usuario Activado, acuerdate de que tendrás que volver a asignarle sus clases", "success")
+    return redirect("/admin/usuarios")
+
 
 #admin cambiar password
 
@@ -1659,7 +1779,7 @@ def nueva_recuperacion():
     c.execute("""
         SELECT id, nombre
         FROM usuarios
-        WHERE rol = 'usuario'
+        WHERE rol = 'usuario' and desactivo=0
         ORDER BY nombre
     """)
     usuarios = c.fetchall()

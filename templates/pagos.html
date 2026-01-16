@@ -5,57 +5,61 @@
 
 <h2>Control de pagos - Mes activo actual: {{ mes_literal }} {{ year }}</h2>
 
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+
+<br />
+<br />
+
 <table>
     <tr>
         <th>Usuario</th>
         <th>Clases / semana</th>
         <th>Cuota</th>
+        <th>Modo</th>
         <th>Estado del pago</th>
         <th class="acciones">Acción</th>
     </tr>
 
-    {% for id, nombre, clases_semana, pagado in usuarios %}
+    {% for id, nombre, clases_semana, pagado, metodo_pago, cuota in usuarios %}
+
+    <form method="post" action="/admin/pagos/toggle/{{ id }}" id="form-pago-{{ id }}"></form>
+
     <tr class="{% if not pagado %}fila-roja{% endif %}">
         <td>{{ nombre }}</td>
-
         <td>{{ clases_semana }}</td>
 
         <td>
-            {% if clases_semana|int == 1 %}
-            55 €
-            {% else %}
-            90 €
-            {% endif %}
+            <input type="text"
+                   name="cuota"
+                   inputmode="numeric"
+                   pattern="[0-9]{1,3}"
+                   maxlength="3"
+                   size="3"
+                   value="{% if cuota is not none %}{{ cuota }}{% else %}{% if clases_semana|int == 1 %}55{% else %}90{% endif %}{% endif %}" form="form-pago-{{ id }}" required>
+
         </td>
 
         <td>
-            {% if pagado %}
-            ✅ Pagado
-            {% else %}
-            ❌ Pendiente
-            {% endif %}
+            <select name="metodo_pago" form="form-pago-{{ id }}" required>
+                <option value="Efectivo" {% if metodo_pago=='Efectivo' %}selected{% endif %}>Efectivo</option>
+                <option value="Tpv" {% if metodo_pago=='Tpv' %}selected{% endif %}>Tpv</option>
+                
+            </select>
         </td>
+
+        <td>{% if pagado %}✅ Pagado{% else %}❌ Pendiente{% endif %}</td>
 
         <td class="acciones">
-            <form method="post"
-                  action="/admin/pagos/toggle/{{ id }}"
-                  {% if pagado %}
-                  onsubmit="return confirm('¿Seguro que quieres marcar este pago como IMPAGO?')"
-                  {% endif %}>
-
-                <button {% if pagado %}
-                        class="boton-rojo"
-                        {% endif %}>
-                    {% if pagado %}
-                    Marcar impago
-                    {% else %}
-                    Marcar pagado
-                    {% endif %}
-                </button>
-            </form>
+            <button type="submit" form="form-pago-{{ id }}"
+                    {% if pagado %}onclick="return confirm('¿Seguro que quieres marcar este pago como IMPAGO?')" {% endif %}>
+                {% if pagado %}Marcar impago{% else %}Marcar pagado{% endif %}
+            </button>
         </td>
     </tr>
+
     {% endfor %}
+
+
 </table>
 
 <a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>

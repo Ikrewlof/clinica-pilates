@@ -14,8 +14,8 @@ def crear_usuario(nombre, email, password, rol, clases_semana):
 
     c.execute("""
         INSERT INTO usuarios
-        (nombre, email, password, rol, clases_semana)
-        VALUES (?, ?, ?, ?, ?)
+        (nombre, email, password, rol, clases_semana,desactivo)
+        VALUES (?, ?, ?, ?, ?,0)
     """, (
         nombre,
         email,
@@ -50,7 +50,7 @@ def obtener_usuarios():
     usuarios = c.execute("""
         SELECT id, nombre, clases_semana
         FROM usuarios
-        WHERE rol = 'usuario'
+        WHERE rol = 'usuario' and desactivo = 0
         ORDER BY nombre
     """).fetchall()
 
@@ -84,7 +84,9 @@ def obtener_usuarios_con_pagos(year, month):
            u.id,
            u.nombre,
            u.clases_semana,
-           IFNULL(p.pagado, 0) AS pagado
+           IFNULL(p.pagado, 0) AS pagado,
+           p.metodo_pago,
+           p.cuota
         FROM usuarios u
         LEFT JOIN pagos p
            ON u.id = p.usuario_id

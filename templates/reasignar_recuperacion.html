@@ -6,6 +6,12 @@
 <h2>Reasignar recuperación</h2>
 <p><strong>Usuario:</strong> {{ nombre }}</p>
 
+<a href="/admin" class="boton boton-secundario">
+    Volver
+</a>
+
+<br />
+
 <div class="calendar-header">
     <div>Lunes</div>
     <div>Martes</div>
@@ -16,7 +22,11 @@
 
 <div class="calendar">
 
-    {% for i in range(primer_dia_semana) %}
+    {# primer día que se va a mostrar (L-V) #}
+    {% set first_workday = (dias_mes | selectattr('weekday', 'lt', 5) | list | first) %}
+    {% set offset = first_workday.weekday if first_workday else 0 %}
+
+    {% for i in range(offset) %}
     <div class="day empty"></div>
     {% endfor %}
 
@@ -30,7 +40,7 @@
         <div class="events">
             {% for clase in dia.clases %}
             <div class="event">
-                
+
 
                 <div class="event-title">{{ clase.descripcion }}</div>
                 <div class="event-time">{{ clase.hora }}</div>
@@ -54,7 +64,7 @@
 
 <br>
 <a href="/admin" class="boton boton-secundario">
-    ⬅ Volver
+    Volver
 </a>
 
 {% endblock %}

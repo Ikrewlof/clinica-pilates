@@ -2,7 +2,7 @@
 {% block title %}Crear clase puntual{% endblock %}
 
 {% block content %}
-<h2>➕ Crear clase en un día concreto</h2>
+<h2>Crear clase en un día concreto</h2>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
@@ -45,4 +45,9 @@
         </div>
     </form>
 </div>
+
+<br />
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+
+
 {% endblock %}

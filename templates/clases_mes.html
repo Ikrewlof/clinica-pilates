@@ -14,6 +14,7 @@
            required>
 
     <button type="submit">Ver clases</button>
+    <a href="/admin" class="boton boton-secundario">Volver</a>
 </form>
 
 <form method="post"
@@ -44,7 +45,6 @@
 <div class="calendar">
 
     {# Huecos antes del día 1 #}
-    {% set offset = calendario[0].weekday %}
     {% for i in range(offset) %}
     <div class="day empty"></div>
     {% endfor %}
@@ -57,7 +57,8 @@
 
     <div class="day
          {% if dia.es_hoy %}hoy{% endif %}
-         {% if dia.clases|length>0 %}con-clases{% else %}sin-clases{% endif %}">
+         {% if dia.clases|length>
+        0 %}con-clases{% else %}sin-clases{% endif %}">
 
         <div class="day-header">
             <span class="day-number">{{ dia.dia_num }}</span>
@@ -90,7 +91,7 @@
                     {% for u in clase.usuarios %}
                     <li>{{ u.nombre }}</li>
                     {% if not clase.es_festivo %}
-                      <form method="post"
+                    <form method="post"
                           action="/admin/clases_mes/quitar"
                           class="quitar-usuario-form">
 
@@ -100,9 +101,10 @@
                         <button type="submit"
                                 class="btn-quitar"
                                 title="Quitar a {{ u.nombre }} de esta clase"
-                                onclick="return confirm('¿Quitar a {{ u.nombre }} de esta clase?')">❌ Dar de baja de esta clase
+                                onclick="return confirm('¿Quitar a {{ u.nombre }} de esta clase?')">
+                            ❌ Dar de baja de esta clase
                         </button>
-                      </form>
+                    </form>
                     {% else %}
                     <span class="no-quitar" title="No se puede modificar un festivo"></span>
                     {% endif %}
@@ -111,7 +113,7 @@
                 {% endif %}
 
             </div>
-            
+
             {% endfor %}
         </div>
 

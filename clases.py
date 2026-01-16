@@ -14,6 +14,9 @@ def crear_clase_base(dia_semana, hora, capacidad, descripcion):
         VALUES (?, ?, ?,?)
     """, (dia_semana, hora, capacidad, descripcion))
 
+    #quiero que cuando cree una clase base, me la ponga en el horario del mes
+
+
     conn.commit()
     conn.close()
 
@@ -281,6 +284,8 @@ def quitar_asignacion(usuario_id, clase_base_id):
         DELETE FROM asignaciones_fijas
         WHERE usuario_id = ? AND clase_base_id = ?
     """, (usuario_id, clase_base_id))
+    
+
 
     conn.commit()
     conn.close()
@@ -391,8 +396,13 @@ def obtener_calendario_mes(year, month):
                 "nombre": nombre
             })
 
-    return calendario
+    # Primer día laborable del mes (L-V)
+    first_workday = next((d for d in calendario if d["weekday"] < 5), None)
+    offset_lv = first_workday["weekday"] if first_workday else 0
 
+
+    return calendario, offset_lv
+   
 
 
 from db import conectar
