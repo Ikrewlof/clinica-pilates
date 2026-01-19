@@ -1,5 +1,4 @@
-﻿from asyncio.windows_events import NULL
-from auth import login_required, role_required
+﻿from auth import login_required, role_required
 from flask import Flask, render_template, request, redirect, session, abort, flash,url_for
 from db import conectar
 from usuarios import validar_login,crear_usuario,obtener_usuarios, obtener_usuario_por_id,obtener_resumen_usuario
