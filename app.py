@@ -16,6 +16,8 @@ from clases import generar_inscripciones_mes
 from clases import obtener_calendario_mes
 from clases import inscribir_usuario_desde_hoy
 import hashlib
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.wrappers import Response
 
 
 
@@ -1849,3 +1851,8 @@ def guardar_recuperacion():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
+
+application = DispatcherMiddleware(Response("Not Found", status=404), {
+    "/pilates": app,
+})
