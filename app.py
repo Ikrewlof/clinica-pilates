@@ -25,7 +25,6 @@ from werkzeug.wrappers import Response
 
 
 
-
 app = Flask(__name__)
 app.secret_key = "clave_secreta_clinica"
 
