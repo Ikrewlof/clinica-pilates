@@ -1,5 +1,5 @@
 ﻿from auth import login_required, role_required
-from flask import Flask, render_template, request, redirect, session, abort, flash,url_for
+from flask import Flask, render_template, request, redirect, session, abort, flash,url_for, send_from_directory 
 from db import conectar
 from usuarios import validar_login,crear_usuario,obtener_usuarios, obtener_usuario_por_id,obtener_resumen_usuario
 from clases import generar_clases_mes_desde_base
@@ -19,7 +19,7 @@ import hashlib
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
 from werkzeug.middleware.proxy_fix import ProxyFix
-
+import os
 
 
 
@@ -30,6 +30,16 @@ app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1, x_prefix=1)
 app.secret_key = "clave_secreta_clinica"
 
+
+
+
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, "static"),
+        "favicon.ico",
+        mimetype="image/x-icon"
+    )
 
 
 @app.route("/debug-sesion")
