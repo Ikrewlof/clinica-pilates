@@ -6,7 +6,7 @@
 <h2>Recuperaciones pendientes mes activo {{ mes_literal }} {{ year }}</h2>
 
 <div class="acciones-superior">
-    <a href="/admin/recuperaciones_nueva" class="boton">Añadir recuperación a un usuario
+    <a href="/pilates/admin/recuperaciones_nueva" class="boton">Añadir recuperación a un usuario
     </a>
 </div>
 <br />
@@ -31,7 +31,7 @@
         <td>{{ f[8:10] }}/{{ f[5:7] }}/{{ f[0:4] }}</td>
         <td>{{ hora }}</td>
         <td class="acciones">
-            <a href="/admin/recuperaciones/asignar/{{ id }}" class="boton">
+            <a href="/pilates/admin/recuperaciones/asignar/{{ id }}" class="boton">
                 Asignar
             </a>        
             
@@ -47,6 +47,6 @@
 </p>
 {% endif %}
 
-<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+<a href="/pilates/admin" class="boton boton-secundario">⬅ Volver al panel</a>
 
 {% endblock %}

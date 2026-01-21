@@ -49,7 +49,7 @@
         <br />
         <div class="boton">
             <button type="submit" class="boton boton-pequeno">Crear clase</button>
-            <a href="/admin" class="boton boton-secundario">Volver</a>
+            <a href="/pilates/admin" class="boton boton-secundario">Volver</a>
         </div>
     </form>
 </section>
@@ -85,7 +85,7 @@
                 <td>
                     {% if activa %}
                     <form method="post"
-                          action="/admin/clases_base/desactivar/{{ id }}"
+                          action="/pilates/admin/clases_base/desactivar/{{ id }}"
                           style="display:inline;">
                         <button class="boton boton-peligro"
                                 onclick="return confirm('¿Desactivar esta clase base?')">
@@ -94,7 +94,7 @@
                     </form>
                     {% else %}
                     <form method="post"
-                          action="/admin/clases_base/activar/{{ id }}"
+                          action="/pilates/admin/clases_base/activar/{{ id }}"
                           style="display:inline;">
                         <button class="boton boton-secundario">
                             Activar
@@ -108,6 +108,6 @@
     </table>
 </section>
 
-<a href="/admin" class="boton boton-secundario">⬅ Volver</a>
+<a href="/pilates/admin" class="boton boton-secundario">⬅ Volver</a>
 
 {% endblock %}

@@ -24,14 +24,14 @@
 
         <div class="acciones-form">
             <button type="submit">➕ Añadir festivo</button>
-            <a href="/admin" class="boton-secundario">Cancelar</a>
+            <a href="/pilates/admin" class="boton-secundario">Cancelar</a>
         </div>
 
     </form>
 </div>
 
 <br />
-<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+<a href="/pilates/admin" class="boton boton-secundario">⬅ Volver al panel</a>
 
 
 {% if festivos %}
@@ -53,7 +53,7 @@
             <td>{{ motivo or "—" }}</td>
             <td class="acciones">
                 <form method="post"
-                      action="/admin/festivos/eliminar/{{ fecha }}"
+                      action="/pilates/admin/festivos/eliminar/{{ fecha }}"
                       onsubmit="return confirm('¿Eliminar este festivo?')">
                     <button class="btn-quitar">❌</button>
                 </form>
@@ -67,6 +67,6 @@
 <p class="info-clases">No hay festivos registrados.</p>
 {% endif %}
 
-<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+<a href="/pilates/admin" class="boton boton-secundario">⬅ Volver al panel</a>
 
 {% endblock %}

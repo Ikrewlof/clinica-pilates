@@ -5,22 +5,22 @@
 <h2>Gestión de usuarios</h2>
 
 <div style="margin: 10px 0 16px 0;">
-    <a href="/admin/usuarios?estado=activos"
+    <a href="/pilates/admin/usuarios?estado=activos"
        class="boton {% if estado=='activos' %}boton-primario{% else %}boton-secundario{% endif %}">
         ✅ Activos
     </a>
 
-    <a href="/admin/usuarios?estado=desactivados"
+    <a href="/pilates/admin/usuarios?estado=desactivados"
        class="boton {% if estado=='desactivados' %}boton-primario{% else %}boton-secundario{% endif %}">
         ⛔ Desactivados
     </a>
 
-    <a href="/admin/usuarios?estado=todos"
+    <a href="/pilates/admin/usuarios?estado=todos"
        class="boton {% if estado=='todos' %}boton-primario{% else %}boton-secundario{% endif %}">
         📋 Todos
     </a>
 
-    <a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+    <a href="/pilates/admin" class="boton boton-secundario">⬅ Volver al panel</a>
 
 </div>
 
@@ -38,7 +38,7 @@
 
     {% for u in usuarios %}
     <tr>
-        <form method="post" action="/admin/usuarios/editar/{{ u[0] }}">
+        <form method="post" action="/pilates/admin/usuarios/editar/{{ u[0] }}">
         <td>
             <input type="text" name="nombre" value="{{ u[1] }}" required>
         </td>
@@ -71,7 +71,7 @@
             </form>
 
             <form method="post"
-                  action="/admin/usuarios/{{ u[0] }}/password"
+                  action="/pilates/admin/usuarios/{{ u[0] }}/password"
                   style="display:inline;">
                 <button type="submit">🔐 Password</button>
             </form>
@@ -81,7 +81,7 @@
             {% if u[5] == 1 %}
             <!-- USUARIO DESACTIVADO → MOSTRAR ACTIVAR -->
             <form method="post"
-                  action="/admin/usuarios/activar/{{ u[0] }}"
+                  action="/pilates/admin/usuarios/activar/{{ u[0] }}"
                   style="display:inline;"
                   onsubmit="return confirm('¿Deseas ACTIVAR este usuario?');">
                 <button class="boton-verde">✅ Activar</button>
@@ -89,7 +89,7 @@
             {% else %}
             <!-- USUARIO ACTIVO → MOSTRAR DESACTIVAR -->
             <form method="post"
-                  action="/admin/usuarios/desactivar/{{ u[0] }}"
+                  action="/pilates/admin/usuarios/desactivar/{{ u[0] }}"
                   style="display:inline;"
                   onsubmit="return confirm('¿Deseas DESACTIVAR este usuario?');">
                 <button class="boton-rojo">❌ Desactivar</button>
@@ -97,7 +97,7 @@
             {% endif %}
 
             <form method="post"
-                  action="/admin/usuarios/eliminar/{{ u[0] }}"
+                  action="/pilates/admin/usuarios/eliminar/{{ u[0] }}"
                   style="display:inline;"
                   onsubmit="return confirm('¿Eliminar este usuario definitivamente?');">
                 <button class="boton-rojo">🗑 Eliminar</button>
@@ -110,5 +110,5 @@
 </table>
 
 <br>
-<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+<a href="/pilates/admin" class="boton boton-secundario">⬅ Volver al panel</a>
 {% endblock %}

@@ -241,7 +241,8 @@ def admin_quitar_usuario_clase():
     conn.close()
 
     flash("Usuario quitado y marcado para recuperación", "success")
-    return redirect(url_for("admin_clases_mes"))
+    #return redirect(url_for("admin_clases_mes"))
+    return redirect("/pilates/admin_clases_mes")
 
 #recuperaciones 
 
@@ -315,8 +316,8 @@ def admin_recuperaciones_asignar(recuperacion_id):
     if not rec:
         conn.close()
         flash("Recuperación no válida", "error")
-        return redirect(url_for("admin_recuperaciones"))
-
+        #return redirect(url_for("admin_recuperaciones"))
+        return redirect("/pilates/admin_recuperaciones")
     usuario_id, nombre = rec
 
     # 2️⃣ Mes activo
@@ -417,7 +418,8 @@ def admin_recuperaciones_confirmar():
     if existe:
         conn.close()
         flash("El usuario ya está inscrito en esta clase", "error")
-        return redirect(url_for("admin_recuperaciones"))
+        #return redirect(url_for("admin_recuperaciones"))
+        return redirect("/pilates/admin_recuperaciones")
 
     # Insertar nueva inscripción
     c.execute("""
@@ -436,8 +438,8 @@ def admin_recuperaciones_confirmar():
     conn.close()
 
     #flash("Recuperación asignada correctamente", "success")
-    return redirect(url_for("admin_recuperaciones"))
-
+    #return redirect(url_for("admin_recuperaciones"))
+    return redirect("/pilates/admin_recuperaciones")
 
 
 
@@ -690,12 +692,13 @@ def admin_nuevo_usuario_post():
 
     if password != password2:
         flash("❌ Las contraseñas no coinciden", "error")
-        return redirect(url_for("admin_nuevo_usuario"))
+        #return redirect(url_for("admin_nuevo_usuario"))
+        return redirect("/pilates/admin_nuevo_usuario")
 
     if rol not in ("usuario", "admin"):
         flash("Rol no válido", "error")
-        return redirect(url_for("admin_nuevo_usuario"))
-
+        #return redirect(url_for("admin_nuevo_usuario"))
+        return redirect("/pilates/admin_nuevo_usuario")
 
 
     crear_usuario(
@@ -899,7 +902,8 @@ def admin_cambiar_password(usuario_id):
     if not usuario:
         conn.close()
         flash("Usuario no encontrado", "error")
-        return redirect(url_for("admin_usuarios"))
+        #return redirect(url_for("admin_usuarios"))
+        return redirect("/pilates/admin_usuarios")
 
     nombre = usuario[0]
 
@@ -937,8 +941,8 @@ def admin_cambiar_password(usuario_id):
     conn.close()
 
     flash("Contraseña actualizada correctamente", "success")
-    return redirect(url_for("admin_usuarios"))
-
+    #return redirect(url_for("admin_usuarios"))
+    return redirect("/pilates/admin_usuarios")
 
 
 #clases base
@@ -1300,8 +1304,8 @@ def admin_borrar_clases_mes():
     conn.close()
 
     flash("Clases del mes eliminadas correctamente", "success")
-    return redirect(url_for("admin_clases_mes"))
-
+    #return redirect(url_for("admin_clases_mes"))
+    return redirect("/pilates/admin_clases_mes")
 
 
 ##PANEL DE USUARIO
@@ -1369,7 +1373,8 @@ def usuario_cambiar_password():
 
         if nueva != repetir:
             flash("Las contraseñas nuevas no coinciden", "error")
-            return redirect(url_for("usuario_cambiar_password"))
+            #return redirect(url_for("usuario_cambiar_password"))
+            return redirect("/pilates/usuario_cambiar_password")
 
         conn = conectar()
         c = conn.cursor()
@@ -1748,7 +1753,8 @@ def admin_crear_clase_manual():
         if existe:
             conn.close()
             flash("Ya existe una clase ese día a esa hora", "error")
-            return redirect(url_for("admin_crear_clase_manual"))
+            #return redirect(url_for("admin_crear_clase_manual"))
+            return redirect("/pilates/admin_crear_clase_manual")
 
         # 2️⃣ Insertar clase
         c.execute("""
@@ -1761,7 +1767,8 @@ def admin_crear_clase_manual():
         conn.close()
 
         flash("Clase creada correctamente", "success")
-        return redirect(url_for("admin_clases_mes"))
+        #return redirect(url_for("admin_clases_mes"))
+        return redirect("/pilates/admin_clases_mes")
 
     conn.close()
     return render_template("admin_clase_manual.html")

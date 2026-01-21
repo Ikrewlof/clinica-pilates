@@ -5,7 +5,7 @@
 
 <h2>Control de pagos - Mes activo actual: {{ mes_literal }} {{ year }}</h2>
 
-<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+<a href="/pilates/admin" class="boton boton-secundario">⬅ Volver al panel</a>
 
 <br />
 <br />
@@ -22,7 +22,7 @@
 
     {% for id, nombre, clases_semana, pagado, metodo_pago, cuota in usuarios %}
 
-    <form method="post" action="/admin/pagos/toggle/{{ id }}" id="form-pago-{{ id }}"></form>
+    <form method="post" action="/pilates/admin/pagos/toggle/{{ id }}" id="form-pago-{{ id }}"></form>
 
     <tr class="{% if not pagado %}fila-roja{% endif %}">
         <td>{{ nombre }}</td>
@@ -62,6 +62,6 @@
 
 </table>
 
-<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+<a href="/pilates/admin" class="boton boton-secundario">⬅ Volver al panel</a>
 
 {% endblock %}

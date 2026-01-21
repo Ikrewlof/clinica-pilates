@@ -14,11 +14,11 @@
            required>
 
     <button type="submit">Ver clases</button>
-    <a href="/admin" class="boton boton-secundario">Volver</a>
+    <a href="/pilates/admin" class="boton boton-secundario">Volver</a>
 </form>
 
 <form method="post"
-      action="/admin/clases_mes/borrar"
+      action="/pilates/admin/clases_mes/borrar"
       onsubmit="return confirm('⚠️ Esto eliminará TODAS las clases del mes. ¿Seguro?');">
 
     <input type="hidden" name="year" value="{{ year }}">
@@ -92,7 +92,7 @@
                     <li>{{ u.nombre }}</li>
                     {% if not clase.es_festivo %}
                     <form method="post"
-                          action="/admin/clases_mes/quitar"
+                          action="/pilates/admin/clases_mes/quitar"
                           class="quitar-usuario-form">
 
                         <input type="hidden" name="usuario_id" value="{{ u.id }}">
@@ -128,7 +128,7 @@
 <p>No hay clases este mes.</p>
 {% endif %}
 
-<a href="/admin" class="boton boton-secundario">
+<a href="/pilates/admin" class="boton boton-secundario">
     ⬅ Volver
 </a>
 

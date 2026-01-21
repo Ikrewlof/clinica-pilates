@@ -57,7 +57,7 @@
                 </div>
 
                 {% else %}
-                <form method="post" action="/usuario/clase/baja">
+                <form method="post" action="/pilates/usuario/clase/baja">
                     <input type="hidden" name="clase_id" value="{{ clase.id }}">
                     <button type="submit"
                             onclick="return confirm('¿Seguro que quieres darte de baja de esta clase?')">
@@ -81,7 +81,7 @@
     {% endif %}
 
 <br>
-<a href="/usuario" class="boton boton-secundario">
+<a href="/pilates/usuario" class="boton boton-secundario">
     ⬅ Volver
 </a>
 

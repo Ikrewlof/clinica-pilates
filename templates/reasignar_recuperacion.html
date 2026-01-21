@@ -6,7 +6,7 @@
 <h2>Reasignar recuperación</h2>
 <p><strong>Usuario:</strong> {{ nombre }}</p>
 
-<a href="/admin" class="boton boton-secundario">
+<a href="/pilates/admin" class="boton boton-secundario">
     Volver
 </a>
 
@@ -45,7 +45,7 @@
                 <div class="event-title">{{ clase.descripcion }}</div>
                 <div class="event-time">{{ clase.hora }}</div>
 
-                <form method="post" action="/admin/recuperaciones/confirmar">
+                <form method="post" action="/pilates/admin/recuperaciones/confirmar">
                     <input type="hidden" name="recuperacion_id" value="{{ recuperacion_id }}">
                     <input type="hidden" name="usuario_id" value="{{ usuario_id }}">
                     <input type="hidden" name="clase_id" value="{{ clase.id }}">
@@ -63,7 +63,7 @@
 </div>
 
 <br>
-<a href="/admin" class="boton boton-secundario">
+<a href="/pilates/admin" class="boton boton-secundario">
     Volver
 </a>
 
