@@ -51,7 +51,7 @@ def obtener_usuarios():
         SELECT id, nombre, clases_semana
         FROM usuarios
         WHERE rol = 'usuario' and desactivo = 0
-        ORDER BY nombre
+        ORDER BY nombre COLLATE ES
     """).fetchall()
 
     conn.close()
@@ -66,7 +66,7 @@ def obtener_usuario_por_id(usuario_id):
         SELECT id, nombre, email, clases_semana
         FROM usuarios
         WHERE id = ?
-        order by nombre
+        order by nombre COLLATE ES
     """, (usuario_id,)).fetchone()
 
     conn.close()
@@ -93,7 +93,7 @@ def obtener_usuarios_con_pagos(year, month):
            AND p.year = ?
            AND p.month = ?
         WHERE u.rol = 'usuario'
-        ORDER BY u.nombre;
+        ORDER BY u.nombre COLLATE ES;
     """, (year, month)).fetchall()
 
     conn.close()
