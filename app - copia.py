@@ -58,9 +58,9 @@ def login():
             session["rol"] = user[2]
 
             if user[2] == "admin":
-                return redirect(url_for("admin"))
+                return redirect("/admin")
             else:
-                return redirect(url_for("usuario"))
+                return redirect("/usuario")
         else:
             error = "Usuario o contraseña incorrectos"
 
@@ -105,7 +105,7 @@ def admin_generar_mes_post():
     ok, mensaje = generar_inscripciones_mes(year, month)
     flash(mensaje, "success" if ok else "warning")
 
-    return redirect(url_for("admin"))
+    return redirect("/admin")
 
 #mes activo
 
@@ -492,7 +492,7 @@ def admin_toggle_pago(usuario_id):
 
     if metodo_pago not in ("Tpv", "Efectivo"):
         flash("Método de pago no válido", "error")
-        return redirect(url_for("admin_pagos"))
+        return redirect("/admin/pagos")
 
     cuota_val = None
     if cuota_str != "":
@@ -502,7 +502,7 @@ def admin_toggle_pago(usuario_id):
                 raise ValueError()
         except:
             flash("Cuota no válida", "error")
-            return redirect(url_for("admin_pagos"))
+            return redirect("/admin/pagos")
 
     conn = conectar()
     c = conn.cursor()
@@ -539,7 +539,7 @@ def admin_toggle_pago(usuario_id):
     conn.commit()
     conn.close()
 
-    return redirect(url_for("admin_pagos"))
+    return redirect("/admin/pagos")
 
 
 
@@ -707,7 +707,7 @@ def admin_nuevo_usuario_post():
     )
 
     flash("Usuario creado correctamente", "success")
-    return redirect(url_for("admin"))
+    return redirect("/admin")
 
 #gestionar usuarios admin
 
@@ -775,7 +775,7 @@ def admin_usuarios_editar(usuario_id):
     conn.close()
 
     flash("Usuario actualizado correctamente", "success")
-    return redirect(url_for("admin_usuarios"))
+    return redirect("/admin/usuarios")
 
 @app.route("/admin/usuarios/eliminar/<int:usuario_id>", methods=["POST"])
 @login_required
@@ -809,7 +809,7 @@ def admin_usuarios_eliminar(usuario_id):
 
 
     flash("Usuario eliminado", "success")
-    return redirect(url_for("admin_usuarios"))
+    return redirect("/admin/usuarios")
 
 
 @app.route("/admin/usuarios/desactivar/<int:usuario_id>", methods=["POST"])
@@ -843,7 +843,7 @@ def admin_usuarios_desactivar(usuario_id):
 
 
     flash("Usuario desactivado", "success")
-    return redirect(url_for("admin_usuarios"))
+    return redirect("/admin/usuarios")
 
 
 @app.route("/admin/usuarios/activar/<int:usuario_id>", methods=["POST"])
@@ -869,7 +869,7 @@ def admin_usuarios_activar(usuario_id):
 
 
     flash("Usuario Activado, acuerdate de que tendrás que volver a asignarle sus clases", "success")
-    return redirect(url_for("admin_usuarios"))
+    return redirect("/admin/usuarios")
 
 
 #admin cambiar password
@@ -987,7 +987,7 @@ def admin_clases_base_post():
     crear_clase_base(dia_semana, hora, capacidad,descripcion)
 
     flash("Clase base creada correctamente", "success")
-    return redirect(url_for("admin_clases_base"))
+    return redirect("/admin/clases_base")
 
 
 #gestion de festivos
@@ -1016,7 +1016,7 @@ def admin_festivos():
         if existe:
             conn.close()
             flash("⚠️ Ya existe un festivo en esa fecha", "error")
-            return redirect(url_for("admin_festivos"))
+            return redirect("/admin/festivos")
 
         c.execute("""
             INSERT OR IGNORE INTO festivos (fecha, motivo)
@@ -1077,7 +1077,7 @@ def eliminar_festivo(fecha):
     conn.close()
 
     flash("Festivo eliminado correctamente", "success")
-    return redirect(url_for("admin_festivos"))
+    return redirect("/admin/festivos")
 
 
 # =========================
@@ -1135,7 +1135,6 @@ def admin_asignar_usuario_post(usuario_id):
     if not clase_id:
         return redirect(f"/admin/asignaciones/{usuario_id}")
 
-
     clase_id = int(clase_id)
 
     conn = conectar()
@@ -1159,7 +1158,7 @@ def admin_asignar_usuario_post(usuario_id):
                 f"Este usuario ya tiene el máximo de {max_clases} clases permitidas",
                 "warning"
             )
-            return redirect(url_for("admin_asignaciones", usuario_id=usuario_id))
+            return redirect(f"/admin/asignaciones/{usuario_id}")
 
         # Insertar si no existe
         c.execute("""
@@ -1180,8 +1179,8 @@ def admin_asignar_usuario_post(usuario_id):
     inscribir_usuario_desde_hoy(usuario_id)
 
 
-    return redirect(url_for("admin_asignaciones", usuario_id=usuario_id))
- 
+    return redirect(f"/admin/asignaciones/{usuario_id}")
+
 
 
 
@@ -1201,7 +1200,7 @@ def admin_quitar_asignacion(usuario_id):
     quitar_asignacion(usuario_id, clase_base_id)
 
     flash("Asignación eliminada", "success")
-    return redirect(url_for("admin_asignaciones", usuario_id=usuario_id))
+    return redirect(f"/admin/asignaciones/{usuario_id}")
 
 @app.route("/admin/asignar_mes", methods=["POST"])
 @login_required
@@ -1216,7 +1215,7 @@ def admin_asignar_mes():
     generar_inscripciones_mes(year, month)
 
     flash("Usuarios asignados automáticamente al mes", "success")
-    redirect(url_for("admin"))
+    return redirect("/admin")
 
 @app.route("/admin/clases_base/activar/<int:clase_id>", methods=["POST"])
 @login_required
@@ -1235,7 +1234,7 @@ def activar_clase_base(clase_id):
     conn.close()
 
     flash("Clase base activada", "success")
-    redirect(url_for("admin_clases_base"))
+    return redirect("/admin/clases_base")
 
 
 @app.route("/admin/clases_base/desactivar/<int:clase_id>", methods=["POST"])
@@ -1255,7 +1254,7 @@ def desactivar_clase_base(clase_id):
     conn.close()
 
     flash("Clase base activada", "success")
-    redirect(url_for("admin_clases_base"))
+    return redirect("/admin/clases_base")
 
 
 
@@ -1385,7 +1384,7 @@ def usuario_cambiar_password():
         conn.close()
 
         flash("Contraseña actualizada correctamente", "success")
-        redirect(url_for("usuario"))
+        return redirect("/usuario")
 
 
 
@@ -1489,7 +1488,7 @@ def usuario_baja_clase():
     if not existe:
         conn.close()
         flash("No puedes darte de baja con menos de 24 horas", "error")
-        redirect(url_for("usuario"))
+        return redirect("/usuario")
 
     es_festivo = c.execute("""
         SELECT es_festivo
@@ -1500,7 +1499,7 @@ def usuario_baja_clase():
     if es_festivo:
         conn.close()
         flash("Esta clase es festiva y no se puede cancelar", "warning")
-        redirect(url_for("usuario"))
+        return redirect("/usuario")
 
 
 
@@ -1520,7 +1519,7 @@ def usuario_baja_clase():
     conn.close()
 
     flash("Te has dado de baja y se ha creado una recuperación", "success")
-    redirect(url_for("usuario"))
+    return redirect("/usuario")
 
 
 
@@ -1687,7 +1686,7 @@ def usuario_apuntar_recuperacion():
     if not rec:
         conn.close()
         flash("No tienes recuperaciones disponibles", "error")
-        redirect(url_for("usuario_recuperaciones"))
+        return redirect("/usuario/recuperaciones")
 
     recuperacion_id = rec[0]
 
@@ -1700,7 +1699,7 @@ def usuario_apuntar_recuperacion():
     if existe:
         conn.close()
         flash("Ya estás inscrito en esta clase", "error")
-        redirect(url_for("usuario_recuperaciones"))
+        return redirect("/usuario/recuperaciones")
 
     # 3️⃣ Insertar inscripción
     c.execute("""
@@ -1719,7 +1718,7 @@ def usuario_apuntar_recuperacion():
     conn.close()
 
     flash("Clase asignada correctamente", "success")
-    redirect(url_for("usuario"))
+    return redirect("/usuario")
 
 
 
@@ -1824,7 +1823,7 @@ def guardar_recuperacion():
     if not clase:
        conn.close()
        flash("No hay clases en el mes activo", "error")
-       redirect(url_for("admin_recuperaciones_nueva"))
+       return redirect("/admin/recuperaciones_nueva")
 
     clase_id, fecha_clase = clase
 
@@ -1846,7 +1845,7 @@ def guardar_recuperacion():
     conn.close()
 
     flash("Recuperación añadida correctamente", "success")
-    redirect(url_for("admin_recuperaciones"))
+    return redirect("/admin/recuperaciones")
 
 
 
