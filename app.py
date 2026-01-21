@@ -317,7 +317,7 @@ def admin_recuperaciones_asignar(recuperacion_id):
         conn.close()
         flash("Recuperación no válida", "error")
         #return redirect(url_for("admin_recuperaciones"))
-        return redirect("/pilates/admin_recuperaciones")
+        return redirect("/pilates/admin/recuperaciones")
     usuario_id, nombre = rec
 
     # 2️⃣ Mes activo
@@ -419,7 +419,7 @@ def admin_recuperaciones_confirmar():
         conn.close()
         flash("El usuario ya está inscrito en esta clase", "error")
         #return redirect(url_for("admin_recuperaciones"))
-        return redirect("/pilates/admin_recuperaciones")
+        return redirect("/pilates/admin/recuperaciones")
 
     # Insertar nueva inscripción
     c.execute("""
@@ -439,7 +439,7 @@ def admin_recuperaciones_confirmar():
 
     #flash("Recuperación asignada correctamente", "success")
     #return redirect(url_for("admin_recuperaciones"))
-    return redirect("/pilates/admin_recuperaciones")
+    return redirect("/pilates/admin/recuperaciones")
 
 
 
