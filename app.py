@@ -632,36 +632,6 @@ def admin_pagos_historico():
 
 
 
-@app.route("/usuario/pagos")
-@login_required
-@role_required("admin")
-def usuario_pagos():
-    if session.get("rol") != "usuario":
-        abort(403)
-
-    usuario_id = session["user_id"]
-
-    conn = conectar()
-    c = conn.cursor()
-
-    pagos = c.execute("""
-        SELECT
-            year,
-            month,
-            cuota,
-            pagado,
-            fecha_pago
-        FROM pagos
-        WHERE usuario_id = ? and pagado=1
-        ORDER BY year DESC, month DESC
-    """, (usuario_id,)).fetchall()
-
-    conn.close()
-
-    return render_template(
-        "usuario_pagos.html",
-        pagos=pagos
-    )
 
 
 #CREAR USUARIO
@@ -1310,6 +1280,8 @@ def admin_borrar_clases_mes():
 
 ##PANEL DE USUARIO
 @app.route("/usuario")
+@login_required
+@role_required("usuario")
 def panel_usuario():
     if session.get("rol") != "usuario":
         abort(403)
@@ -1340,6 +1312,8 @@ def panel_usuario():
 
 
 @app.route("/usuario/clases")
+@login_required
+@role_required("usuario")
 def usuario_clases_mes():
     if session.get("rol") != "usuario":
         abort(403)
@@ -1360,6 +1334,8 @@ def usuario_clases_mes():
 
 
 @app.route("/usuario/password", methods=["GET", "POST"])
+@login_required
+@role_required("usuario")
 def usuario_cambiar_password():
     if session.get("rol") != "usuario":
         abort(403)
@@ -1395,6 +1371,39 @@ def usuario_cambiar_password():
 
 
     return render_template("usuario_cambiar_password.html")
+
+
+
+@app.route("/usuario/pagos")
+@login_required
+@role_required("usuario")
+def usuario_pagos():
+    if session.get("rol") != "usuario":
+        abort(403)
+
+    usuario_id = session["user_id"]
+
+    conn = conectar()
+    c = conn.cursor()
+
+    pagos = c.execute("""
+        SELECT
+            year,
+            month,
+            cuota,
+            pagado,
+            fecha_pago
+        FROM pagos
+        WHERE usuario_id = ? and pagado=1
+        ORDER BY year DESC, month DESC
+    """, (usuario_id,)).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "usuario_pagos.html",
+        pagos=pagos
+    )
 
 
 
