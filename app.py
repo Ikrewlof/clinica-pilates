@@ -856,7 +856,7 @@ def hash_password(password):
 @app.route("/admin/usuarios/password/<int:usuario_id>", methods=["GET", "POST"])
 @login_required
 @role_required("admin")
-def admin_cambiar_password(usuario_id):
+def admin_usuario_password(usuario_id):
     if session.get("rol") != "admin":
         abort(403)
 
