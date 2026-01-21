@@ -135,7 +135,7 @@ def admin_mes_activo():
         
                 
         flash("Mes activo actualizado correctamente", "success")
-        return redirect(url_for("admin_mes_activo"))
+        return redirect("/pilates/admin_mes_activo/")
 
     year, month = obtener_mes_activo()
 
