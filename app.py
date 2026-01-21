@@ -693,12 +693,12 @@ def admin_nuevo_usuario_post():
     if password != password2:
         flash("❌ Las contraseñas no coinciden", "error")
         #return redirect(url_for("admin_nuevo_usuario"))
-        return redirect("/pilates/admin_nuevo_usuario")
+        return redirect("/pilates/admin/nuevo_usuario")
 
     if rol not in ("usuario", "admin"):
         flash("Rol no válido", "error")
         #return redirect(url_for("admin_nuevo_usuario"))
-        return redirect("/pilates/admin_nuevo_usuario")
+        return redirect("/pilates/admin/nuevo_usuario")
 
 
     crear_usuario(
@@ -903,7 +903,7 @@ def admin_cambiar_password(usuario_id):
         conn.close()
         flash("Usuario no encontrado", "error")
         #return redirect(url_for("admin_usuarios"))
-        return redirect("/pilates/admin_usuarios")
+        return redirect("/pilates/admin/usuarios")
 
     nombre = usuario[0]
 
@@ -942,7 +942,7 @@ def admin_cambiar_password(usuario_id):
 
     flash("Contraseña actualizada correctamente", "success")
     #return redirect(url_for("admin_usuarios"))
-    return redirect("/pilates/admin_usuarios")
+    return redirect("/pilates/admin/usuarios")
 
 
 #clases base
@@ -1754,7 +1754,7 @@ def admin_crear_clase_manual():
             conn.close()
             flash("Ya existe una clase ese día a esa hora", "error")
             #return redirect(url_for("admin_crear_clase_manual"))
-            return redirect("/pilates/admin_crear_clase_manual")
+            return redirect("/pilates/admin/crear_clase_manual")
 
         # 2️⃣ Insertar clase
         c.execute("""
