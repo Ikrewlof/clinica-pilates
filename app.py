@@ -242,7 +242,7 @@ def admin_quitar_usuario_clase():
 
     flash("Usuario quitado y marcado para recuperación", "success")
     #return redirect(url_for("admin_clases_mes"))
-    return redirect("/pilates/admin_clases_mes")
+    return redirect("/pilates/admin/clases_mes")
 
 #recuperaciones 
 
@@ -1305,7 +1305,7 @@ def admin_borrar_clases_mes():
 
     flash("Clases del mes eliminadas correctamente", "success")
     #return redirect(url_for("admin_clases_mes"))
-    return redirect("/pilates/admin_clases_mes")
+    return redirect("/pilates/admin/clases_mes")
 
 
 ##PANEL DE USUARIO
@@ -1768,7 +1768,7 @@ def admin_crear_clase_manual():
 
         flash("Clase creada correctamente", "success")
         #return redirect(url_for("admin_clases_mes"))
-        return redirect("/pilates/admin_clases_mes")
+        return redirect("/pilates/admin/clases_mes")
 
     conn.close()
     return render_template("admin_clase_manual.html")
