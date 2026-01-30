@@ -47,15 +47,15 @@
 
         <td>
             <select name="rol">
-                <option value="usuario" {% if u[3]= ="usuario" %}selected{% endif %}>
+                <option value="usuario" {% if u[3] == "usuario" %}selected{% endif %}>
                     Usuario
                 </option>
 
-                <option value="admin" {% if u[3]= ="supervisor" %}selected{% endif %}>
+                <option value="supervisor" {% if u[3] == "supervisor" %}selected{% endif %}>
                     Supervisor
                 </option>
 
-                <option value="admin" {% if u[3]= ="admin" %}selected{% endif %}>
+                <option value="admin" {% if u[3] == "admin" %}selected{% endif %}>
                     Admin
                 </option>
 

@@ -64,10 +64,10 @@ def login():
 
         if user:
             session["user_id"] = user[0]
-            session["nombre"]=user[1]
+            session["nombre"]= user[1]
             session["rol"] = user[2]
 
-            if user[2] == "admin":
+            if user[2] in ("admin", "supervisor"):
                 return redirect("/pilates/admin")
             else:
                 return redirect("/pilates/usuario")
@@ -193,7 +193,7 @@ def obtener_mes_activo():
 @login_required
 @role_required("admin","supervisor")
 def admin_clases_mes():
-    if "rol" not in session or session["rol"] != "admin":
+    if "rol" not in session or session["rol"] not in ("admin", "supervisor"):
         abort(403)
 
     mes = request.args.get("mes")
@@ -222,9 +222,9 @@ def admin_clases_mes():
 
 @app.route("/admin/clases_mes/quitar", methods=["POST"])
 @login_required
-@role_required("admin")
+@role_required("admin","supervisor")
 def admin_quitar_usuario_clase():
-    if session.get("rol") != "admin":
+    if "rol" not in session or session["rol"] not in ("admin", "supervisor"):
         abort(403)
 
     usuario_id = int(request.form["usuario_id"])
@@ -264,7 +264,7 @@ def admin_quitar_usuario_clase():
 @login_required
 @role_required("admin","supervisor")
 def admin_recuperaciones():
-    if session.get("rol") != "admin":
+    if "rol" not in session or session["rol"] not in ("admin", "supervisor"):
         abort(403)
 
     conn = conectar()
@@ -311,9 +311,9 @@ from datetime import date
 
 @app.route("/admin/recuperaciones/asignar/<int:recuperacion_id>")
 @login_required
-@role_required("admin")
+@role_required("admin","supervisor")
 def admin_recuperaciones_asignar(recuperacion_id):
-    if session.get("rol") != "admin":
+    if "rol" not in session or session["rol"] not in ("admin", "supervisor"):
         abort(403)
 
     conn = conectar()
@@ -409,9 +409,9 @@ def admin_recuperaciones_asignar(recuperacion_id):
 
 @app.route("/admin/recuperaciones/confirmar", methods=["POST"])
 @login_required
-@role_required("admin")
+@role_required("admin","supervisor")
 def admin_recuperaciones_confirmar():
-    if session.get("rol") != "admin":
+    if "rol" not in session or session["rol"] not in ("admin", "supervisor"):
         abort(403)
 
     recuperacion_id = int(request.form["recuperacion_id"])
@@ -1253,7 +1253,7 @@ def desactivar_clase_base(clase_id):
 @login_required
 @role_required("admin")
 def admin_borrar_clases_mes():
-    if session.get("rol") != "admin":
+    if "rol" not in session or session["rol"] not in ("admin", "supervisor"):
         abort(403)
 
     year = int(request.form["year"])

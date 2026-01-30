@@ -5,11 +5,15 @@
 
 <h2>Recuperaciones pendientes mes activo {{ mes_literal }} {{ year }}</h2>
 
+
+{% if rol == "admin" %}
 <div class="acciones-superior">
-    <a href="/pilates/admin/recuperaciones_nueva" class="boton">Añadir recuperación a un usuario
+    <a href="/pilates/admin/recuperaciones_nueva" class="boton">
+        Añadir recuperación a un usuario
     </a>
 </div>
 <br />
+{% endif %}
 {% if pendientes %}
 
 <table>
@@ -33,8 +37,8 @@
         <td class="acciones">
             <a href="/pilates/admin/recuperaciones/asignar/{{ id }}" class="boton">
                 Asignar
-            </a>        
-            
+            </a>
+
         </td>
         <td>{% if especial == 1 %}especial{% endif %}</td>
     </tr>
