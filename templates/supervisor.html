@@ -1,0 +1,37 @@
+﻿{% extends "base.html" %}
+{% block title %}Panel administración{% endblock %}
+
+{% block content %}
+<h2>Panel de administración</h2>
+<p>Bienvenid@, <strong>{{ session.nombre }}</strong></p>
+
+
+ {% with messages = get_flashed_messages(with_categories=true) %}
+ {% if messages %}
+ {% for category, message in messages %}
+<p style="color: green; font-weight: bold;">{{ message }}</p>
+ {% endfor %}
+ {% endif %}
+ {% endwith %}
+
+<div class="admin-menu">
+
+    <div class="menu-bloque">
+        <h3>📅 Clases</h3>
+        <a class="boton" href="/pilates/admin/clases_mes">Ver clases del mes</a>
+    </div>
+
+    <div class="menu-bloque">
+        <h3>🔁 Asignaciones</h3>
+        <a class="boton" href="/pilates/admin/recuperaciones">Recuperaciones</a>
+    </div>
+
+
+
+
+</div>
+
+
+{% endblock %}
+
+

@@ -89,6 +89,22 @@ def admin():
 
     return render_template("admin.html")
 
+#perfil supervisor
+
+
+@app.route("/supervisor")
+@login_required
+@role_required("supervisor")
+
+def admin():
+    if "rol" not in session or session["rol"] != "admin":
+        abort(403)
+
+   
+
+    return render_template("supervisor.html")
+
+
 #GENERAR MES
 
 @app.route("/admin/generar_mes", methods=["GET"])
@@ -187,7 +203,7 @@ def obtener_mes_activo():
 
 @app.route("/admin/clases_mes")
 @login_required
-@role_required("admin")
+@role_required("admin","supervisor")
 def admin_clases_mes():
     if "rol" not in session or session["rol"] != "admin":
         abort(403)
@@ -258,7 +274,7 @@ def admin_quitar_usuario_clase():
 
 @app.route("/admin/recuperaciones")
 @login_required
-@role_required("admin")
+@role_required("admin","supervisor")
 def admin_recuperaciones():
     if session.get("rol") != "admin":
         abort(403)
