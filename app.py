@@ -96,8 +96,8 @@ def admin():
 @login_required
 @role_required("supervisor")
 
-def admin():
-    if "rol" not in session or session["rol"] != "admin":
+def supervisor():
+    if "rol" not in session or session["rol"] != "supervisor":
         abort(403)
 
    
