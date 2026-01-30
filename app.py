@@ -79,30 +79,18 @@ def login():
 
 @app.route("/admin")
 @login_required
-@role_required("admin")
+@role_required("admin","supervisor")
 
 def admin():
-    if "rol" not in session or session["rol"] != "admin":
+
+    rol = session.get("rol")
+    if rol not in ("admin", "supervisor"):
         abort(403)
 
    
 
-    return render_template("admin.html")
+    return render_template("admin.html",rol=rol)
 
-#perfil supervisor
-
-
-@app.route("/supervisor")
-@login_required
-@role_required("supervisor")
-
-def supervisor():
-    if "rol" not in session or session["rol"] != "supervisor":
-        abort(403)
-
-   
-
-    return render_template("supervisor.html")
 
 
 #GENERAR MES
@@ -691,7 +679,7 @@ def admin_nuevo_usuario_post():
         #return redirect(url_for("admin_nuevo_usuario"))
         return redirect("/pilates/admin/nuevo_usuario")
 
-    if rol not in ("usuario", "admin"):
+    if rol not in ("usuario", "admin","supervisor"):
         flash("Rol no válido", "error")
         #return redirect(url_for("admin_nuevo_usuario"))
         return redirect("/pilates/admin/nuevo_usuario")
