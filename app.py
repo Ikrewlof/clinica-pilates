@@ -46,7 +46,7 @@ def favicon():
 def debug_sesion():
     return {
         "user_id": session.get("user_id"),
-        "role": session.get("rol")
+        "rol": session.get("rol")
     }
 
 

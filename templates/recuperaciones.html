@@ -6,7 +6,7 @@
 <h2>Recuperaciones pendientes mes activo {{ mes_literal }} {{ year }}</h2>
 
 
-{% if rol == "admin" %}
+{% if session["rol"]  == "admin" %}
 <div class="acciones-superior">
     <a href="/pilates/admin/recuperaciones_nueva" class="boton">
         Añadir recuperación a un usuario

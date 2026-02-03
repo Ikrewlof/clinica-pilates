@@ -17,7 +17,9 @@
     <a href="/pilates/admin" class="boton boton-secundario">Volver</a>
 </form>
 
-{% if rol == "admin" %}
+
+
+{% if session["rol"]  == "admin" %}
 <form method="post"
       action="/pilates/admin/clases_mes/borrar"
       onsubmit="return confirm('⚠️ Esto eliminará TODAS las clases del mes. ¿Seguro?');">
