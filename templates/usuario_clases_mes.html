@@ -18,7 +18,8 @@
 <div class="calendar">
 
     {# Huecos antes del día 1 #}
-    {% for i in range(calendario[0].dia_semana_num) %}
+
+    {% for i in range(offset_lv) %}
     <div class="day empty"></div>
     {% endfor %}
 

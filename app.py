@@ -1337,11 +1337,12 @@ def usuario_clases_mes():
     hoy = date.today()
     year, month = obtener_mes_activo()
 
-    calendario = obtener_clases_usuario_mes(usuario_id, year, month)
+    calendario,offset_lv = obtener_clases_usuario_mes(usuario_id, year, month)
 
     return render_template(
         "usuario_clases_mes.html",
         calendario=calendario,
+        offset_lv=offset_lv,
         year=year,
         month=month
     )
@@ -1482,7 +1483,18 @@ def obtener_clases_usuario_mes(usuario_id, year, month):
             "clases": clases_dia
         })
 
-    return calendario
+
+    # offset para colocar el día 1 en su columna (L=0..D=6)
+    offset = date(year, month, 1).weekday()   # 0=lunes ... 6=domingo
+
+    # si vas a pintar solo L-V, si cae en sábado(5) o domingo(6),
+    # quieres que el mes empiece el lunes siguiente -> 0 huecos
+    if offset >= 5:
+        offset_lv = 0
+    else:
+        offset_lv = offset
+
+    return calendario, offset_lv
 
 
 

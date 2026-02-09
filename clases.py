@@ -401,6 +401,8 @@ def obtener_calendario_mes(year, month):
     offset_lv = first_workday["weekday"] if first_workday else 0
 
 
+
+
     return calendario, offset_lv
    
 
