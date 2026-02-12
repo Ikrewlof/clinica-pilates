@@ -1,11 +1,500 @@
-﻿/* === CALENDARIO GENERAL === */
+﻿/* =========================================================
+   Pilates Garval — estilo.css (refactor “app-like”)
+   - Tipografía Inter + system stack
+   - Componentes consistentes (botones, tablas, formularios)
+   - Calendario y vista “clases del día” pulidas
+   - Sin reglas duplicadas/conflictivas
+========================================================= */
 
+/* =========================
+   1) VARIABLES / TOKENS
+========================= */
+:root {
+    --primary: #c51a52;
+    --primary-dark: #a01442;
+    --primary-light: #f6c1d0;
+    --bg: #f4f6f8;
+    --text: #2c2c2c;
+    --card: #ffffff;
+    --border: rgba(0,0,0,.10);
+    --shadow: 0 1px 2px rgba(0,0,0,.06);
+    --shadow-hover: 0 6px 14px rgba(0,0,0,.10);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --focus-ring: 0 0 0 3px rgba(197, 26, 82, .12);
+}
+
+/* =========================
+   2) BASE / TYPO
+========================= */
+html, body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.45;
+    font-size: 14px;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 22px;
+    color: var(--primary);
+}
+
+h3 {
+    font-size: 16px;
+    color: var(--primary);
+}
+
+small, .muted {
+    color: rgba(0,0,0,.6);
+}
+
+/* =========================
+   3) LAYOUT: HEADER / MAIN / FOOTER
+========================= */
+header {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    height: 80px;
+    width: auto;
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+main {
+    padding: 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    color: #777;
+}
+
+    footer p {
+        margin: 4px 0;
+    }
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .logo {
+        height: 32px;
+    }
+
+    header h1 {
+        font-size: 18px;
+    }
+}
+
+/* =========================
+   4) FLASH / MENSAJES
+========================= */
+.flash {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-left: 5px solid var(--primary);
+    border-radius: var(--radius-sm);
+}
+
+/* =========================
+   5) BOTONES (links y buttons)
+========================= */
+button, .boton {
+    font-family: inherit;
+    font-weight: 600;
+    letter-spacing: .01em;
+}
+
+a.boton,
+button {
+    background: var(--primary);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+    a.boton:hover,
+    button:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    a.boton:focus-visible,
+    button:focus-visible {
+        outline: none;
+        box-shadow: var(--shadow), var(--focus-ring);
+    }
+
+/* Variantes */
+.boton-secundario {
+    background: #ddd !important;
+    color: #333 !important;
+    border: 1px solid rgba(0,0,0,.12) !important;
+    box-shadow: none !important;
+}
+
+    .boton-secundario:hover {
+        background: #ccc !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+.boton-rojo, a.boton-rojo {
+    background: var(--primary-dark) !important;
+}
+
+    .boton-rojo:hover, a.boton-rojo:hover {
+        background: #7a0d2f !important;
+    }
+
+.boton-verde {
+    /* si quieres un verde real, dime el tono; mantengo tu estilo actual si ya lo tenías */
+}
+
+/* Botones “danger” genérico */
+button.danger {
+    background: #c00;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+/* =========================
+   6) TABLAS
+========================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    margin-bottom: 25px;
+    border-radius: var(--radius);
+    overflow: hidden; /* para que el header respete el radio */
+    border: 1px solid rgba(0,0,0,.08);
+}
+
+th, td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+    text-align: center;
+}
+
+th {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: .02em;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+/* Oculta columna email en móvil (como tenías) */
+@media (max-width: 600px) {
+    th:nth-child(2),
+    td:nth-child(2) {
+        display: none;
+    }
+}
+
+/* Inputs dentro de tablas */
+table input[type="text"],
+table input[type="number"],
+table select {
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(0,0,0,.18);
+    padding: 6px 8px;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+    table input:focus,
+    table select:focus {
+        border-color: rgba(197,26,82,.55);
+        box-shadow: var(--focus-ring);
+    }
+
+/* Ajustes que ya tenías */
+table input[type="number"],
+table select {
+    width: 90px;
+}
+
+td:last-child {
+    text-transform: capitalize;
+}
+
+/* =========================
+   7) LISTAS
+========================= */
+ul {
+    padding-left: 20px;
+}
+
+/* =========================
+   8) LOGIN
+========================= */
+.login-body {
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 30px 35px;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.login-logo {
+    max-width: 180px;
+    margin-bottom: 15px;
+}
+
+.login-container h2 {
+    color: var(--primary);
+    margin-bottom: 25px;
+}
+
+.login-form label {
+    display: block;
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 11px 12px;
+    margin-bottom: 18px;
+    border: 1px solid #ccc;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 11px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    box-shadow: var(--shadow);
+}
+
+    .login-form button:hover {
+        background-color: #a51544;
+    }
+
+/* =========================
+   9) FORMULARIOS (general)
+========================= */
+.form-container {
+    max-width: 420px;
+    background: white;
+    padding: 25px;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+}
+
+    .formulario label {
+        margin-top: 12px;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .formulario input,
+    .formulario select {
+        margin-top: 6px;
+        padding: 8px;
+        border-radius: var(--radius-sm);
+        border: 1px solid #ccc;
+        font-family: inherit;
+    }
+
+.acciones-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+    .acciones-form button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+        .acciones-form button:hover {
+            background: var(--primary-dark);
+        }
+
+/* =========================
+   10) ADMIN MENU
+========================= */
+.admin-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.menu-bloque {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+    .menu-bloque h3 {
+        margin: 0 0 12px 0;
+        font-size: 1.05em;
+        color: #333;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+    }
+
+    .menu-bloque .boton {
+        display: block;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    /* Bloques especiales */
+    .menu-bloque.normas {
+        width: 100%;
+        background: #fffbe6;
+        border-left: 5px solid #f0c36d;
+    }
+
+.normas-wrapper {
+    margin: 30px 0;
+}
+
+.contenido-normas p {
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.contenido-normas a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+    .contenido-normas a:hover {
+        text-decoration: underline;
+    }
+
+.version-app {
+    background: #eef4ff;
+    border-left: 5px solid #5b8def;
+}
+
+.lista-version {
+    margin: 8px 0 0 18px;
+    padding: 0;
+}
+
+    .lista-version li {
+        margin-bottom: 6px;
+        font-size: 0.95em;
+    }
+
+/* =========================
+   11) SELECTOR MES
+========================= */
+.selector-mes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+    .selector-mes input[type="month"] {
+        padding: 6px;
+        font-size: 1em;
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba(0,0,0,.18);
+    }
+
+/* =========================
+   12) CALENDARIO (nuevo grid L-V)
+========================= */
 .calendar-header {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     background: #f1f3f4;
     border-bottom: 1px solid #dadce0;
-    font-weight: 600;
+    font-weight: 700;
     color: #5f6368;
 }
 
@@ -13,8 +502,6 @@
         padding: 10px;
         text-align: center;
     }
-
-/* === GRID DEL MES === */
 
 .calendar {
     display: grid;
@@ -24,12 +511,10 @@
     gap: 1px;
 }
 
-/* === DÍA === */
-
 .day {
     background: #ffffff;
     min-height: 140px;
-    padding: 6px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
 }
@@ -38,59 +523,62 @@
         background: #f5f5f5;
     }
 
+    /* Día actual (calendario mensual) */
     .day.hoy {
-        border: 2px solid #c61a52;
+        border: 2px solid var(--primary);
         background: #f8fbff;
+        border-radius: var(--radius-sm);
     }
 
-day.hoy .day-header {
-    background: #e8f0fe;
-    color: #1a73e8;
-    font-weight: bold;
-    
-}
+        /* FIX: selector correcto (antes faltaba el punto) */
+        .day.hoy .day-header {
+            background: #e8f0fe;
+            color: #1a73e8;
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 4px 6px;
+        }
 
+    /* Hover del día */
+    .day:hover {
+        background: #f8f9fa;
+    }
 
-/* === CABECERA DEL DÍA === */
-
+/* Cabecera de día */
 .day-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 0.85rem;
     color: #5f6368;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .day-number {
-    font-weight: 600;
+    font-weight: 700;
     color: #202124;
-    
 }
 
-/* === EVENTOS === */
-
-
+/* Eventos contenedor */
 .events {
     display: flex;
     flex-direction: column;
-    gap: 0.9px;
+    gap: 6px;
 }
 
-/* === EVENTO === */
-
+/* Evento */
 .event {
     background: #FFE4E1;
-    color: #000000;
-    border-radius: 6px;
-    padding: 6px;
+    color: #000;
+    border-radius: 10px;
+    padding: 10px;
     font-size: 0.9rem;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+    border: 1px solid rgba(0,0,0,.06);
 }
 
-
 .event-title {
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 2px;
     color: #C71585;
 }
@@ -98,66 +586,75 @@ day.hoy .day-header {
 .event-time {
     font-size: 0.9rem;
     opacity: 0.9;
-    color: #000000;
+    color: #000;
     font-style: italic;
 }
-
-/* === FESTIVO === */
 
 .event.festivo {
     background: #E6E6FA;
-    color: #000000;
+    color: #000;
     font-style: italic;
 }
-
-/* === BLOQUEADO (menos de 24h) === */
 
 .event.bloqueado {
     background: #DCDCDC;
 }
 
-/* === NOTAS === */
-
-.event-note {
-    font-size: 0.9rem;
-    margin-top: 4px;
-    opacity: 0.9;
-    color: #000000;
-    font-style: italic;
+/* NOTAS: ocultas por defecto, visibles al hover (desktop) */
+.event .event-note {
+    display: none;
+    margin-top: 8px;
+    font-size: 13px;
+    opacity: .85;
+    line-height: 1.25;
 }
 
-/* === BOTÓN BAJA === */
+.event:hover .event-note {
+    display: block;
+}
 
+.event:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
+    transition: box-shadow .15s ease, transform .15s ease;
+}
+
+/* Botón dentro de evento (baja/acciones) */
 .event form button {
-    margin-top: 4px;
+    margin-top: 6px;
     background: #FFB6C1;
-    border: none;
-    color: #000000;
-    padding: 4px 6px;
+    border: 1px solid rgba(0,0,0,.08);
+    color: #000;
+    padding: 6px 10px;
     font-size: 0.9rem;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
+    box-shadow: none;
+    transform: none;
 }
 
     .event form button:hover {
-        background: rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.35);
     }
 
-/* === EFECTO HOVER === */
-
-.day:hover {
-    background: #f8f9fa;
+/* Botón baja icon-only con texto al hover (desktop) */
+.btn-baja {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
+    .btn-baja .btn-text {
+        display: none;
+        margin-left: 6px;
+        white-space: nowrap;
+    }
 
-button.danger {
-    background: #c00;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    cursor: pointer;
-}
+    .btn-baja:hover .btn-text {
+        display: inline;
+    }
 
+/* Quitar usuario / icono pequeño */
 .quitar-usuario-form {
     display: inline;
 }
@@ -178,348 +675,9 @@ button.danger {
     font-size: 0.8em;
 }
 
-
-.selector-mes {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-    .selector-mes input[type="month"] {
-        padding: 6px;
-        font-size: 1em;
-    }
-
-
-
-:root {
-    --primary: #c51a52;
-    --primary-dark: #a01442;
-    --primary-light: #f6c1d0; /* ← ~70% más claro */
-    --bg: #f4f6f8;
-    --text: #2c2c2c;
-}
-
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-}
-
-/* ===== HEADER ===== */
-header {
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-@media (max-width: 600px) {
-    .logo {
-        height: 32px;
-    }
-
-    header h1 {
-        font-size: 18px;
-    }
-}
-
-
-header a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.logo {
-    height: 40px;
-    width: auto;
-}
-
-/* ===== MAIN ===== */
-main {
-    padding: 20px;
-}
-
-/* ===== TITULOS ===== */
-h2, h3 {
-    color: var(--primary);
-    margin-top: 0;
-}
-
-/* ===== FLASH / MENSAJES ===== */
-.flash {
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    padding: 10px 15px;
-    margin-bottom: 15px;
-    border-left: 5px solid var(--primary);
-    border-radius: 4px;
-}
-
-/* ===== TABLAS ===== */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    margin-bottom: 25px;
-}
-
-th, td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #ddd;
-    vertical-align: middle;
-    text-align: center;
-}
-
-th {
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    font-weight: bold;
-}
-
-tr:hover {
-    background: #fafafa;
-}
-
-td.acciones {
-    text-align: center;
-    white-space: nowrap;
-}
-
-/* ===== BOTONES ===== */
-a.boton,
-button {
-    background: var(--primary);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 1px;
-    text-decoration: none;
-    font-size: 14px;
-    display: inline-block;
-}
-
-    a.boton:hover,
-    button:hover {
-        background: var(--primary-dark);
-    }
-
-a.boton-rojo {
-    background: var(--primary-dark);
-}
-
-    a.boton-rojo:hover {
-        background: #7a0d2f;
-    }
-
-/* ===== LISTAS ===== */
-ul {
-    padding-left: 20px;
-}
-
-/* ===== FOOTER ===== */
-footer {
-    text-align: center;
-    padding: 10px;
-    color: #777;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 600px) {
-    th:nth-child(2),
-    td:nth-child(2) {
-        display: none;
-    }
-
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-
-
-/* ===== LOGIN ===== */
-.login-body {
-    background: var(--bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-
-
-
-.login-container {
-    width: 100%;
-    max-width: 420px;
-    background: white;
-    padding: 30px 35px;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    text-align: center;
-}
-
-.login-logo {
-    max-width: 180px;
-    margin-bottom: 15px;
-}
-
-.login-container h2 {
-    color: #c51a52;
-    margin-bottom: 25px;
-}
-
-.login-form label {
-    display: block;
-    text-align: left;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.login-form input {
-    width: 100%;
-    padding: 11px 12px;
-    margin-bottom: 18px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-    box-sizing: border-box;
-}
-
-.login-form button {
-    width: 100%;
-    padding: 11px; /* 👈 igual que inputs */
-    background-color: #c51a52;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-    .login-form button:hover {
-        background-color: #a51544;
-    }
-
-
-.admin-menu {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-    margin-top: 20px;
-}
-
-    .admin-menu a.boton {
-        text-align: center;
-        padding: 12px;
-        font-size: 15px;
-    }
-
-
-/* ===== FORMULARIOS ===== */
-.form-container {
-    max-width: 420px;
-    background: white;
-    padding: 25px;
-    border-radius: 6px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-.formulario {
-    display: flex;
-    flex-direction: column;
-}
-
-    .formulario label {
-        margin-top: 12px;
-        font-weight: bold;
-        font-size: 14px;
-    }
-
-    .formulario input,
-    .formulario select {
-        margin-top: 6px;
-        padding: 8px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-    }
-
-.acciones-form {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-    .acciones-form button {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 10px 14px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-        .acciones-form button:hover {
-            background: var(--primary-dark);
-        }
-
-.boton-secundario {
-    background: #ddd;
-    color: #333;
-    padding: 10px 14px;
-    border-radius: 4px;
-    text-decoration: none;
-    text-align: center;
-}
-
-    .boton-secundario:hover {
-        background: #ccc;
-    }
-
-td:last-child {
-    text-transform: capitalize;
-}
-
-footer p {
-    margin: 4px 0;
-}
-
-.info-clases {
-    margin-top: 5px;
-    margin-bottom: 15px;
-    color: #555;
-    font-size: 14px;
-}
-
-.fila-roja {
-    background-color: #fdeaea;
-}
-
-.acciones-masivas {
-    margin-bottom: 15px;
-    display: flex;
-    gap: 10px;
-}
-
-    .acciones-masivas button {
-        padding: 8px 14px;
-        font-size: 14px;
-    }
-
+/* =========================
+   13) CALENDARIO “antiguo” (si lo sigues usando)
+========================= */
 .calendario {
     width: 100%;
     border-collapse: collapse;
@@ -529,7 +687,7 @@ footer p {
     .calendario th {
         text-align: center;
         padding: 10px;
-        background-color: #c51a52;
+        background-color: var(--primary);
         color: white;
     }
 
@@ -545,14 +703,14 @@ footer p {
         }
 
 .numero-dia {
-    font-weight: bold;
+    font-weight: 700;
     margin-bottom: 5px;
 }
 
 .sesion {
     margin-top: 4px;
     padding: 4px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 12px;
 }
 
@@ -594,89 +752,289 @@ footer p {
     width: 100%;
 }
 
-.admin-menu {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
-    margin-top: 20px;
+/* =========================
+   14) VISTA “CLASES DEL DÍA”
+========================= */
+.page-clases-dia {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
 }
 
-.menu-bloque {
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
+    /* Quitar resaltado de HOY solo en la vista de clases del día */
+    .page-clases-dia .day.hoy {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+
+/* Lista de usuarios en tarjetas */
+.usuarios {
+    list-style: none;
+    margin: 8px 0 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
-    .menu-bloque h3 {
+.usuario-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.usuario-nombre {
+    font-weight: 600;
+}
+
+/* =========================
+   15) ACCIONES EN TABLA (usuarios)
+   IMPORTANT: antes tenías .acciones button { width:100% }
+========================= */
+td.acciones {
+    white-space: nowrap;
+}
+
+    /* Wrapper recomendado dentro del TD:
+   <td class="acciones"><div class="acciones-wrap"> ... </div></td>
+*/
+    td.acciones .acciones-wrap {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+    }
+
+    td.acciones form {
+        margin: 0;
+    }
+
+    /* Botones compactos solo en acciones */
+    td.acciones button {
+        display: inline-flex !important;
+        width: auto !important;
+        margin: 0 !important;
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+        min-height: 30px;
+        border-radius: 10px;
+    }
+
+/* En móvil, permitir wrap si no cabe */
+@media (max-width: 768px) {
+    td.acciones .acciones-wrap {
+        flex-wrap: wrap;
+    }
+
+    /* En móvil NO hay hover: si quieres mostrar textos de .btn-baja siempre */
+    .btn-baja .btn-text {
+        display: inline;
+    }
+}
+
+/* =========================
+   16) MISC
+========================= */
+.info-clases {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 14px;
+}
+
+.fila-roja {
+    background-color: #fdeaea;
+}
+
+.acciones-masivas {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+    .acciones-masivas button {
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+
+.pago-form input[type="number"],
+.pago-form select {
+    width: 120px;
+}
+
+
+.usuarios {
+    list-style: none;
+    padding-left: 0;
+    margin: 6px 0 0 0;
+}
+
+.usuario-item {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* distancia exacta entre nombre y ❌ */
+}
+
+.usuario-nombre {
+    font-weight: 600;
+}
+
+.quitar-usuario-form {
+    margin: 0;
+}
+
+.btn-quitar {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px; /* ajusta el tamaño de la ❌ */
+    line-height: 1;
+}
+
+    .btn-quitar:hover {
+        transform: scale(1.1);
+    }
+
+
+/* =========================
+   Botón profesional para <details>/<summary>
+========================= */
+
+.normas-detalle {
+    margin: 16px 0;
+}
+
+    /* Quitamos el marcador por defecto del summary */
+    .normas-detalle summary {
+        list-style: none;
+    }
+
+        .normas-detalle summary::-webkit-details-marker {
+            display: none;
+        }
+
+/* Estilo de botón */
+.btn-normas {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #eef4ff;
+    color: #1a3f8b;
+    border: 1px solid rgba(26,63,139,.18);
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06);
+    transition: background .15s ease, box-shadow .15s ease, transform .12s ease;
+}
+
+    /* Hover */
+    .btn-normas:hover {
+        background: #e3ecff;
+        box-shadow: 0 6px 14px rgba(0,0,0,.10);
+        transform: translateY(-1px);
+    }
+
+/* Estado abierto */
+.normas-detalle[open] .btn-normas {
+    background: #dbe7ff;
+    border-color: rgba(26,63,139,.28);
+}
+
+/* Espacio cuando se despliega */
+.normas-detalle[open] .contenido-normas {
+    margin-top: 12px;
+}
+
+
+
+/* =========================
+   Normas: tarjeta compacta cuando está cerrada
+========================= */
+
+/* Por defecto: la tarjeta de normas más compacta */
+.menu-bloque.normas {
+    padding: 12px 14px; /* antes era más grande */
+}
+
+    /* Cuando el details está CERRADO: solo ocupa lo justo del botón */
+    .menu-bloque.normas .contenido-normas {
         margin-top: 0;
-        margin-bottom: 12px;
-        font-size: 1.05em;
-        color: #333;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 5px;
     }
 
-    .menu-bloque .boton {
-        display: block;
-        margin-bottom: 8px;
+    /* Cuando se abre: damos aire */
+    .menu-bloque.normas details[open] .contenido-normas {
+        margin-top: 12px;
+    }
+
+    /* Evitar márgenes verticales “raros” de los <p> dentro */
+    .menu-bloque.normas .contenido-normas p {
+        margin: 0 0 10px 0;
+    }
+
+    /* Quitar <br> extra que te mete huecos enormes */
+    .menu-bloque.normas .contenido-normas br {
+        display: none;
     }
 
 
+/* =========================
+   Normas: ancho contenido (no a pantalla completa)
+========================= */
 
-
-.contenido-normas p {
-    margin-bottom: 12px;
-    line-height: 1.5;
+.normas-wrapper {
+    display: flex;
+    justify-content: center; /* centra el bloque */
 }
 
 .menu-bloque.normas {
     width: 100%;
-    background: #fffbe6;
-    border-left: 5px solid #f0c36d;
-}
-
-.normas-wrapper {
-    margin: 30px 0;
+    max-width: 720px; /* ajusta: 600–800px según te guste */
 }
 
 
-.contenido-normas a {
-    color: #1a73e8;
-    text-decoration: none;
-}
-
-    .contenido-normas a:hover {
-        text-decoration: underline;
-    }
-
-.version-app {
-    background: #eef4ff;
-    border-left: 5px solid #5b8def;
-}
-
-.lista-version {
-    margin: 8px 0 0 18px;
-    padding: 0;
-}
-
-    .lista-version li {
-        margin-bottom: 6px;
-        font-size: 0.95em;
-    }
-
-
-
-.pago-form input[type="number"], .pago-form select {
-    width: 120px;
-}
-
-table input[type="number"],
-table select {
-    width: 90px;
-}
-
-.acciones button {
-    display: block;
+/* Header y grid perfectamente alineados */
+.calendar-wrap {
     width: 100%;
-    margin-bottom: 6px;
+}
+
+/* MISMA rejilla y MISMO gap */
+.calendar-header,
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px; /* igual que tu calendar */
+    box-sizing: border-box;
+}
+
+/* Asegura que no haya padding/margen que desplace columnas */
+.calendar-header {
+    padding: 0;
+    margin: 0;
+}
+
+    .calendar-header div {
+        padding: 10px 0; /* vertical ok */
+        margin: 0;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+/* =========================
+   MÓVIL: columnas más anchas con scroll horizontal
+========================= */
+@media (max-width: 768px) {
+
+    .calendar-wrap {
+        overflow-x: auto; /* permite desplazamiento horizontal */
+    }
+
+    .calendar-header,
+    .calendar {
+        min-width: 520px; /* ajusta: 480–600px según te guste */
+    }
 }

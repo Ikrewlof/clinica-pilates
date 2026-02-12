@@ -9,7 +9,7 @@
     Recuperaciones disponibles:
     <strong>{{ recuperaciones }}</strong>
 </p>
-
+<p>Pulsa ➕ en el día que quieras para apuntarte a esa clase.</p>
     {% if calendario %}
 
 <!-- Cabecera -->
@@ -24,7 +24,7 @@
 <div class="calendar">
 
     <!-- Huecos antes del día 1 -->
-    {% for i in range(calendario.offset) %}
+    {% for i in range(calendario.offset_lv) %}
     <div class="day empty"></div>
     {% endfor %}
 
@@ -54,9 +54,9 @@
                 {% if recuperaciones > 0 %}
                 <form method="post" action="/pilates/usuario/recuperaciones/apuntar">
                     <input type="hidden" name="clase_id" value="{{ clase.id }}">
-                    <button type="submit"
-                            onclick="return confirm('¿Apuntarte a esta clase?')">
-                        ➕ Apuntarme
+                    <button type="submit" class="btn-baja"
+                            onclick="return confirm('¿Quieres apuntarte a esta clase?')">
+                        ➕
                     </button>
                 </form>
                 {% else %}

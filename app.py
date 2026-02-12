@@ -217,6 +217,29 @@ def admin_clases_mes():
         month=month
     )
 
+#ver las clases del dia
+
+from datetime import date
+
+@app.route("/admin/clases_dia")
+@login_required
+@role_required("admin","supervisor")
+def admin_clases_dia():
+    hoy_date = date.today()                  # date
+    hoy_str = hoy_date.strftime("%d/%m/%Y")  # dd/mm/aaaa
+    hoy_iso = hoy_date.isoformat()           # YYYY-MM-DD (para buscar en el calendario)
+
+    year, month = hoy_date.year, hoy_date.month
+    calendario, offset_lv = obtener_calendario_mes(year, month)
+
+    dia_hoy = next((d for d in calendario if d["fecha"] == hoy_iso), None)
+
+    return render_template(
+        "clases_dia.html",
+        dia=dia_hoy,
+        hoy_str=hoy_str
+    )
+
 
 #quitar usuarios en el mes
 
@@ -726,7 +749,7 @@ def admin_usuarios():
     else:
         estado = "todos"  # por si llega algo raro
 
-    sql += " ORDER BY nombre"
+    sql += " ORDER BY nombre COLLATE ES"
 
     usuarios = c.execute(sql, params).fetchall()
     conn.close()
@@ -1584,7 +1607,6 @@ def obtener_recuperaciones_pendientes(usuario_id):
     conn.close()
     return total
 
-
 from datetime import date
 import calendar
 
@@ -1612,12 +1634,14 @@ def obtener_clases_mes_disponibles(year, month):
 
     conn.close()
 
-    # 🔹 Día de la semana del día 1 (lunes=0)
-    primer_dia = date(year, month, 1)
-    offset = primer_dia.weekday()  # 0=lunes
+    # Offset real del día 1 (0=lunes..6=domingo)
+    weekday_1 = date(year, month, 1).weekday()
+
+    # ✅ Offset para grid L-V (0..4). Si cae en sábado/domingo -> 0
+    offset_lv = weekday_1 if weekday_1 < 5 else 0
 
     calendario = {
-        "offset": offset,
+        "offset_lv": offset_lv,
         "dias": []
     }
 
@@ -1625,29 +1649,31 @@ def obtener_clases_mes_disponibles(year, month):
 
     # Crear días del mes
     for dia in range(1, num_dias + 1):
-        fecha = date(year, month, dia)
-        fecha_str = fecha.isoformat()
+        fecha_obj = date(year, month, dia)
+        fecha_str = fecha_obj.isoformat()
 
         calendario["dias"].append({
             "fecha": fecha_str,
             "dia_num": dia,
-            "dia_semana": fecha.weekday(),  # 0-6
+            "dia_semana": fecha_obj.weekday(),  # 0-6
             "clases": []
         })
 
-    # Meter clases
+    # Index para meter clases rápido (sin bucles anidados)
+    index = {d["fecha"]: d for d in calendario["dias"]}
+
     for clase_id, fecha, hora, descripcion, capacidad, ocupacion in filas:
-        for d in calendario["dias"]:
-            if d["fecha"] == fecha:
-                d["clases"].append({
-                    "id": clase_id,
-                    "hora": hora,
-                    "descripcion": descripcion,
-                    "ocupacion": ocupacion,
-                    "capacidad": capacidad
-                })
+        if fecha in index:
+            index[fecha]["clases"].append({
+                "id": clase_id,
+                "hora": hora,
+                "descripcion": descripcion,
+                "ocupacion": ocupacion,
+                "capacidad": capacidad
+            })
 
     return calendario
+
 
 
 

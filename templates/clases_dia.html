@@ -1,0 +1,65 @@
+﻿{% extends "base.html" %}
+{% block title %}Clases del día{% endblock %}
+
+{% block content %}
+
+
+<div class="page-clases-dia">
+
+    <h2>Clases de hoy {{ dia["dia_semana"] }} {{ hoy_str }}</h2>
+
+    {% if dia and dia["clases"] and (dia["clases"]|length > 0) %}
+
+    <div class="day hoy con-clases">
+        <div class="events">
+            {% for clase in dia["clases"].values() %}
+            <div class="event {% if clase.es_festivo %}festivo{% endif %}">
+                <div class="event-title">{{ clase.descripcion }}</div>
+
+                <div class="event-time">
+                    {{ clase.hora }} ({{ clase.usuarios|length }}/{{ clase.capacidad }})
+                </div>
+
+                {% if clase.es_festivo %}
+                <div class="event-note">
+                    🎉 Día Festivo{% if clase.motivo_festivo %} – {{ clase.motivo_festivo }}{% endif %}
+                </div>
+                {% endif %}
+
+                {% if clase.usuarios %}
+                <ul class="usuarios">
+                    {% for u in clase.usuarios %}
+                    <li class="usuario-item">
+                        <span class="usuario-nombre">{{ u.nombre }}</span>
+
+                        {% if not clase.es_festivo %}
+                        <form method="post"
+                              action="/pilates/admin/clases_mes/quitar"
+                              class="quitar-usuario-form">
+                            <input type="hidden" name="usuario_id" value="{{ u.id }}">
+                            <input type="hidden" name="clase_id" value="{{ clase.id }}">
+
+
+                        </form>
+                        {% else %}
+                        <span class="no-quitar" title="No se puede modificar un festivo"></span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+
+                </ul>
+                {% endif %}
+            </div>
+            <br />
+            {% endfor %}
+        </div>
+    </div>
+
+    {% else %}
+    <p>Hoy ({{ hoy }}) no hay clases.</p>
+    {% endif %}
+
+    <a href="/pilates/admin" class="boton boton-secundario">⬅ Volver</a>
+
+</div>
+{% endblock %}

@@ -58,7 +58,7 @@
 
     {# Saltar sábados (5) y domingos (6) #}
     {% if dia.weekday < 5 %}
-
+    
     <div class="day
          {% if dia.es_hoy %}hoy{% endif %}
          {% if dia.clases|length>
@@ -70,7 +70,7 @@
 
         <div class="events">
             {% for clase in dia.clases.values() %}
-
+            <br />
             <div class="event {% if clase.es_festivo %}festivo{% endif %}">
                 <div class="event-title">
                     {{ clase.descripcion }}
@@ -90,28 +90,30 @@
                 </div>
                 {% endif %}
 
+               
                 {% if clase.usuarios %}
                 <ul class="usuarios">
                     {% for u in clase.usuarios %}
-                    <li>{{ u.nombre }}</li>
-                    {% if not clase.es_festivo %}
-                    <form method="post"
-                          action="/pilates/admin/clases_mes/quitar"
-                          class="quitar-usuario-form">
+                    <li class="usuario-item">
+                        <span class="usuario-nombre">{{ u.nombre }}</span>
 
-                        <input type="hidden" name="usuario_id" value="{{ u.id }}">
-                        <input type="hidden" name="clase_id" value="{{ clase.id }}">
-
-                        <button type="submit"
-                                class="btn-quitar"
-                                title="Quitar a {{ u.nombre }} de esta clase"
-                                onclick="return confirm('¿Quitar a {{ u.nombre }} de esta clase?')">
-                            ❌ Dar de baja de esta clase
-                        </button>
-                    </form>
-                    {% else %}
-                    <span class="no-quitar" title="No se puede modificar un festivo"></span>
-                    {% endif %}
+                        {% if not clase.es_festivo %}
+                        <form method="post"
+                              action="/pilates/admin/clases_mes/quitar"
+                              class="quitar-usuario-form">
+                            <input type="hidden" name="usuario_id" value="{{ u.id }}">
+                            <input type="hidden" name="clase_id" value="{{ clase.id }}">
+                            <button type="submit"
+                                    class="btn-quitar"
+                                    title="Quitar a {{ u.nombre }} de esta clase"
+                                    onclick="return confirm('¿Quitar a {{ u.nombre }} de esta clase?')">
+                                ❌
+                            </button>
+                        </form>
+                        {% else %}
+                        <span class="no-quitar" title="No se puede modificar un festivo"></span>
+                        {% endif %}
+                    </li>
                     {% endfor %}
                 </ul>
                 {% endif %}
