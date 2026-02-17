@@ -73,7 +73,19 @@
             <tr>
                 <td>{{ dias[dia_semana] }}</td>
                 <td>{{ hora }}</td>
-                <td>{{ descripcion }}</td>
+                <td>
+                    <form method="post" action="/pilates/admin/clases_base/editar/{{ id }}" class="inline-form">
+                        <input type="text"
+                               name="descripcion"
+                               value="{{ descripcion }}"
+                               class="input-tabla"
+                               required>
+
+                        <button type="submit" class="boton boton-pequeno">
+                            💾 Guardar
+                        </button>
+                    </form>
+                </td>
                 <td>{{ ocupacion }} / {{ capacidad }}</td>
                 <td>
                     {% if activa %}

@@ -11,6 +11,7 @@
 
     {% if calendario %}
 <p>Pulsa ❌ en el día que quieras para desapuntarte de esa clase.</p>
+<p>El usuario no se puede quitar de una clase con menos de 12 horas de antelación</p>
 
 
 <div class="calendar-wrap">
@@ -64,10 +65,7 @@
                     </div>
 
                     {% elif not clase.puede_borrarse %}
-                    <div class="event-note">
-                        No puede darse de baja de esta clase con menos de 12h
-                    </div>
-
+                   
                     {% else %}
                     <form method="post" action="/pilates/usuario/clase/baja">
                         <input type="hidden" name="clase_id" value="{{ clase.id }}">

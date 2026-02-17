@@ -217,6 +217,36 @@ def admin_clases_mes():
         month=month
     )
 
+
+@app.route("/admin/clases_base/editar/<int:clase_id>", methods=["POST"])
+@login_required
+@role_required("admin")
+def editar_descripcion_clase_base(clase_id):
+    if session.get("rol") != "admin":
+        abort(403)
+
+    descripcion = request.form.get("descripcion", "").strip()
+
+    if not descripcion:
+        flash("La descripción no puede estar vacía", "error")
+        return redirect("/pilates/admin/clases_base")
+
+    conn = conectar()
+    c = conn.cursor()
+
+    c.execute("""
+        UPDATE clases_base
+        SET descripcion = ?
+        WHERE id = ?
+    """, (descripcion, clase_id))
+
+    conn.commit()
+    conn.close()
+
+    flash("Descripción actualizada correctamente", "ok")
+    return redirect("/pilates/admin/clases_base")
+
+
 #ver las clases del dia
 
 from datetime import date
