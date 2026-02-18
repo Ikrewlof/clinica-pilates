@@ -10,7 +10,7 @@
 </p>
 
 
-<a href="/pilates/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
 <br />
 <br />
 {% if usuarios %}
@@ -29,7 +29,7 @@
             <td>{{ u[2] }}</td>
             <td class="acciones">
                 <a class="boton"
-                   href="/pilates/admin/asignaciones/{{ u[0] }}">
+                   href="/admin/asignaciones/{{ u[0] }}">
                     Asignar
                 </a>
             </td>
@@ -41,6 +41,6 @@
 <p>No hay usuarios disponibles.</p>
 {% endif %}
 
-<a href="/pilates/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
 
 {% endblock %}

@@ -68,9 +68,9 @@ def login():
             session["rol"] = user[2]
 
             if user[2] in ("admin", "supervisor"):
-                return redirect("/pilates/admin")
+                return redirect("/admin")
             else:
-                return redirect("/pilates/usuario")
+                return redirect("/usuario")
         else:
             error = "Usuario o contraseña incorrectos"
 
@@ -119,7 +119,7 @@ def admin_generar_mes_post():
     ok, mensaje = generar_inscripciones_mes(year, month)
     flash(mensaje, "success" if ok else "warning")
 
-    return redirect("/pilates/admin")
+    return redirect("/admin")
 
 #mes activo
 
@@ -149,7 +149,7 @@ def admin_mes_activo():
         
                 
         flash("Mes activo actualizado correctamente", "success")
-        return redirect("/pilates/admin/mes_activo")
+        return redirect("/admin/mes_activo")
 
     year, month = obtener_mes_activo()
 
@@ -229,7 +229,7 @@ def editar_descripcion_clase_base(clase_id):
 
     if not descripcion:
         flash("La descripción no puede estar vacía", "error")
-        return redirect("/pilates/admin/clases_base")
+        return redirect("/admin/clases_base")
 
     conn = conectar()
     c = conn.cursor()
@@ -244,7 +244,7 @@ def editar_descripcion_clase_base(clase_id):
     conn.close()
 
     flash("Descripción actualizada correctamente", "ok")
-    return redirect("/pilates/admin/clases_base")
+    return redirect("/admin/clases_base")
 
 
 #ver las clases del dia
@@ -309,7 +309,7 @@ def admin_quitar_usuario_clase():
 
     flash("Usuario quitado y marcado para recuperación", "success")
     #return redirect(url_for("admin_clases_mes"))
-    return redirect("/pilates/admin/clases_mes")
+    return redirect("/admin/clases_mes")
 
 #recuperaciones 
 
@@ -384,7 +384,7 @@ def admin_recuperaciones_asignar(recuperacion_id):
         conn.close()
         flash("Recuperación no válida", "error")
         #return redirect(url_for("admin_recuperaciones"))
-        return redirect("/pilates/admin/recuperaciones")
+        return redirect("/admin/recuperaciones")
     usuario_id, nombre = rec
 
     # 2️⃣ Mes activo
@@ -486,7 +486,7 @@ def admin_recuperaciones_confirmar():
         conn.close()
         flash("El usuario ya está inscrito en esta clase", "error")
         #return redirect(url_for("admin_recuperaciones"))
-        return redirect("/pilates/admin/recuperaciones")
+        return redirect("/admin/recuperaciones")
 
     # Insertar nueva inscripción
     c.execute("""
@@ -506,7 +506,7 @@ def admin_recuperaciones_confirmar():
 
     #flash("Recuperación asignada correctamente", "success")
     #return redirect(url_for("admin_recuperaciones"))
-    return redirect("/pilates/admin/recuperaciones")
+    return redirect("/admin/recuperaciones")
 
 
 
@@ -561,7 +561,7 @@ def admin_toggle_pago(usuario_id):
 
     if metodo_pago not in ("Tpv", "Efectivo"):
         flash("Método de pago no válido", "error")
-        return redirect("/pilates/admin/pagos")
+        return redirect("/admin/pagos")
 
     cuota_val = None
     if cuota_str != "":
@@ -571,7 +571,7 @@ def admin_toggle_pago(usuario_id):
                 raise ValueError()
         except:
             flash("Cuota no válida", "error")
-            return redirect("/pilates/admin/pagos")
+            return redirect("/admin/pagos")
 
     conn = conectar()
     c = conn.cursor()
@@ -608,7 +608,7 @@ def admin_toggle_pago(usuario_id):
     conn.commit()
     conn.close()
 
-    return redirect("/pilates/admin/pagos")
+    return redirect("/admin/pagos")
 
 
 
@@ -730,12 +730,12 @@ def admin_nuevo_usuario_post():
     if password != password2:
         flash("❌ Las contraseñas no coinciden", "error")
         #return redirect(url_for("admin_nuevo_usuario"))
-        return redirect("/pilates/admin/nuevo_usuario")
+        return redirect("/admin/nuevo_usuario")
 
     if rol not in ("usuario", "admin","supervisor"):
         flash("Rol no válido", "error")
         #return redirect(url_for("admin_nuevo_usuario"))
-        return redirect("/pilates/admin/nuevo_usuario")
+        return redirect("/admin/nuevo_usuario")
 
 
     crear_usuario(
@@ -747,7 +747,7 @@ def admin_nuevo_usuario_post():
     )
 
     flash("Usuario creado correctamente", "success")
-    return redirect("/pilates/admin")
+    return redirect("/admin")
 
 #gestionar usuarios admin
 
@@ -815,7 +815,7 @@ def admin_usuarios_editar(usuario_id):
     conn.close()
 
     flash("Usuario actualizado correctamente", "success")
-    return redirect("/pilates/admin/usuarios")
+    return redirect("/admin/usuarios")
 
 @app.route("/admin/usuarios/eliminar/<int:usuario_id>", methods=["POST"])
 @login_required
@@ -849,7 +849,7 @@ def admin_usuarios_eliminar(usuario_id):
 
 
     flash("Usuario eliminado", "success")
-    return redirect("/pilates/admin/usuarios")
+    return redirect("/admin/usuarios")
 
 
 @app.route("/admin/usuarios/desactivar/<int:usuario_id>", methods=["POST"])
@@ -883,7 +883,7 @@ def admin_usuarios_desactivar(usuario_id):
 
 
     flash("Usuario desactivado", "success")
-    return redirect("/pilates/admin/usuarios")
+    return redirect("/admin/usuarios")
 
 
 @app.route("/admin/usuarios/activar/<int:usuario_id>", methods=["POST"])
@@ -909,7 +909,7 @@ def admin_usuarios_activar(usuario_id):
 
 
     flash("Usuario Activado, acuerdate de que tendrás que volver a asignarle sus clases", "success")
-    return redirect("/pilates/admin/usuarios")
+    return redirect("/admin/usuarios")
 
 
 #admin cambiar password
@@ -940,7 +940,7 @@ def admin_cambiar_password(usuario_id):
         conn.close()
         flash("Usuario no encontrado", "error")
         #return redirect(url_for("admin_usuarios"))
-        return redirect("/pilates/admin/usuarios")
+        return redirect("/admin/usuarios")
 
     nombre = usuario[0]
 
@@ -979,7 +979,7 @@ def admin_cambiar_password(usuario_id):
 
     flash("Contraseña actualizada correctamente", "success")
     #return redirect(url_for("admin_usuarios"))
-    return redirect("/pilates/admin/usuarios")
+    return redirect("/admin/usuarios")
 
 
 #clases base
@@ -1028,7 +1028,7 @@ def admin_clases_base_post():
     crear_clase_base(dia_semana, hora, capacidad,descripcion)
 
     flash("Clase base creada correctamente", "success")
-    return redirect("/pilates/admin/clases_base")
+    return redirect("/admin/clases_base")
 
 
 #gestion de festivos
@@ -1057,7 +1057,7 @@ def admin_festivos():
         if existe:
             conn.close()
             flash("⚠️ Ya existe un festivo en esa fecha", "error")
-            return redirect("/pilates/admin/festivos")
+            return redirect("/admin/festivos")
 
         c.execute("""
             INSERT OR IGNORE INTO festivos (fecha, motivo)
@@ -1118,7 +1118,7 @@ def eliminar_festivo(fecha):
     conn.close()
 
     flash("Festivo eliminado correctamente", "success")
-    return redirect("/pilates/admin/festivos")
+    return redirect("/admin/festivos")
 
 
 # =========================
@@ -1174,7 +1174,7 @@ def admin_asignar_usuario_post(usuario_id):
     checked = request.form.get("checked")  # existe solo si está marcado
 
     if not clase_id:
-        return redirect(f"/pilates/admin/asignaciones/{usuario_id}")
+        return redirect(f"/admin/asignaciones/{usuario_id}")
 
     clase_id = int(clase_id)
 
@@ -1199,7 +1199,7 @@ def admin_asignar_usuario_post(usuario_id):
                 f"Este usuario ya tiene el máximo de {max_clases} clases permitidas",
                 "warning"
             )
-            return redirect(f"/pilates/admin/asignaciones/{usuario_id}")
+            return redirect(f"/admin/asignaciones/{usuario_id}")
 
         # Insertar si no existe
         c.execute("""
@@ -1220,7 +1220,7 @@ def admin_asignar_usuario_post(usuario_id):
     inscribir_usuario_desde_hoy(usuario_id)
 
 
-    return redirect(f"/pilates/admin/asignaciones/{usuario_id}")
+    return redirect(f"/admin/asignaciones/{usuario_id}")
 
 
 
@@ -1241,7 +1241,7 @@ def admin_quitar_asignacion(usuario_id):
     quitar_asignacion(usuario_id, clase_base_id)
 
     flash("Asignación eliminada", "success")
-    return redirect(f"/pilates/admin/asignaciones/{usuario_id}")
+    return redirect(f"/admin/asignaciones/{usuario_id}")
 
 @app.route("/admin/asignar_mes", methods=["POST"])
 @login_required
@@ -1256,7 +1256,7 @@ def admin_asignar_mes():
     generar_inscripciones_mes(year, month)
 
     flash("Usuarios asignados automáticamente al mes", "success")
-    return redirect("/pilates/admin")
+    return redirect("/admin")
 
 @app.route("/admin/clases_base/activar/<int:clase_id>", methods=["POST"])
 @login_required
@@ -1275,7 +1275,7 @@ def activar_clase_base(clase_id):
     conn.close()
 
     flash("Clase base activada", "success")
-    return redirect("/pilates/admin/clases_base")
+    return redirect("/admin/clases_base")
 
 
 @app.route("/admin/clases_base/desactivar/<int:clase_id>", methods=["POST"])
@@ -1295,7 +1295,7 @@ def desactivar_clase_base(clase_id):
     conn.close()
 
     flash("Clase base activada", "success")
-    return redirect("/pilates/admin/clases_base")
+    return redirect("/admin/clases_base")
 
 
 
@@ -1342,7 +1342,7 @@ def admin_borrar_clases_mes():
 
     flash("Clases del mes eliminadas correctamente", "success")
     #return redirect(url_for("admin_clases_mes"))
-    return redirect("/pilates/admin/clases_mes")
+    return redirect("/admin/clases_mes")
 
 
 ##PANEL DE USUARIO
@@ -1418,7 +1418,7 @@ def usuario_cambiar_password():
         if nueva != repetir:
             flash("Las contraseñas nuevas no coinciden", "error")
             #return redirect(url_for("usuario_cambiar_password"))
-            return redirect("/pilates/usuario_cambiar_password")
+            return redirect("/usuario_cambiar_password")
 
         conn = conectar()
         c = conn.cursor()
@@ -1433,7 +1433,7 @@ def usuario_cambiar_password():
         conn.close()
 
         flash("Contraseña actualizada correctamente", "success")
-        return redirect("/pilates/usuario")
+        return redirect("/usuario")
 
 
 
@@ -1581,7 +1581,7 @@ def usuario_baja_clase():
     if not existe:
         conn.close()
         flash("No puedes darte de baja con menos de 24 horas", "error")
-        return redirect("/pilates/usuario")
+        return redirect("/usuario")
 
     es_festivo = c.execute("""
         SELECT es_festivo
@@ -1592,7 +1592,7 @@ def usuario_baja_clase():
     if es_festivo:
         conn.close()
         flash("Esta clase es festiva y no se puede cancelar", "warning")
-        return redirect("/pilates/usuario")
+        return redirect("/usuario")
 
 
 
@@ -1612,7 +1612,7 @@ def usuario_baja_clase():
     conn.close()
 
     flash("Te has dado de baja y se ha creado una recuperación", "success")
-    return redirect("/pilates/usuario")
+    return redirect("/usuario")
 
 
 
@@ -1782,7 +1782,7 @@ def usuario_apuntar_recuperacion():
     if not rec:
         conn.close()
         flash("No tienes recuperaciones disponibles", "error")
-        return redirect("/pilates/usuario/recuperaciones")
+        return redirect("/usuario/recuperaciones")
 
     recuperacion_id = rec[0]
 
@@ -1795,7 +1795,7 @@ def usuario_apuntar_recuperacion():
     if existe:
         conn.close()
         flash("Ya estás inscrito en esta clase", "error")
-        return redirect("/pilates/usuario/recuperaciones")
+        return redirect("/usuario/recuperaciones")
 
     # 3️⃣ Insertar inscripción
     c.execute("""
@@ -1814,7 +1814,7 @@ def usuario_apuntar_recuperacion():
     conn.close()
 
     flash("Clase asignada correctamente", "success")
-    return redirect("/pilates/usuario")
+    return redirect("/usuario")
 
 
 
@@ -1845,7 +1845,7 @@ def admin_crear_clase_manual():
             conn.close()
             flash("Ya existe una clase ese día a esa hora", "error")
             #return redirect(url_for("admin_crear_clase_manual"))
-            return redirect("/pilates/admin/crear_clase_manual")
+            return redirect("/admin/crear_clase_manual")
 
         # 2️⃣ Insertar clase
         c.execute("""
@@ -1859,7 +1859,7 @@ def admin_crear_clase_manual():
 
         flash("Clase creada correctamente", "success")
         #return redirect(url_for("admin_clases_mes"))
-        return redirect("/pilates/admin/clases_mes")
+        return redirect("/admin/clases_mes")
 
     conn.close()
     return render_template("admin_clase_manual.html")
@@ -1921,7 +1921,7 @@ def guardar_recuperacion():
     if not clase:
        conn.close()
        flash("No hay clases en el mes activo", "error")
-       return redirect("/pilates/admin/recuperaciones_nueva")
+       return redirect("/admin/recuperaciones_nueva")
 
     clase_id, fecha_clase = clase
 
@@ -1943,7 +1943,7 @@ def guardar_recuperacion():
     conn.close()
 
     flash("Recuperación añadida correctamente", "success")
-    return redirect("/pilates/admin/recuperaciones")
+    return redirect("/admin/recuperaciones")
 
 
 
@@ -1953,5 +1953,5 @@ if __name__ == "__main__":
 
 
 application = DispatcherMiddleware(Response("Not Found", status=404), {
-    "/pilates": app,
+    "/": app,
 })

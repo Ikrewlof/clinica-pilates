@@ -60,11 +60,11 @@
                 </br>
                 <p>
                     Para más información, puedes consultar los siguientes documentos:
-                    <a href="/pilates/static/docs/Normas_Fisioterapia_Garval.pdf" target="_blank">
+                    <a href="/static/docs/Normas_Fisioterapia_Garval.pdf" target="_blank">
                         <strong>Normas Fisioterapia Garval</strong>
                     </a>
                     y la
-                    <a href="/pilates/static/docs/Festivos_y_cuota_mensual.pdf" target="_blank">
+                    <a href="/static/docs/Festivos_y_cuota_mensual.pdf" target="_blank">
                         <strong>Festivos y cuota mensual</strong>
                     </a>.
                 </p>
@@ -86,7 +86,7 @@
         <p>
             <strong>{{ resumen.clases_semana }}</strong> clases / semana
         </p>
-        <a href="/pilates/usuario/clases" class="boton">Ver mis clases</a>
+        <a href="/usuario/clases" class="boton">Ver mis clases</a>
     </div>
 
     <div class="menu-bloque">
@@ -96,7 +96,7 @@
         </p>
 
         {% if resumen.recuperaciones > 0 %}
-        <a href="/pilates/usuario/recuperaciones" class="boton">Gestionar</a>
+        <a href="/usuario/recuperaciones" class="boton">Gestionar</a>
         {% else %}
         <span class="info-clases">No tienes recuperaciones</span>
         {% endif %}
@@ -112,13 +112,13 @@
             <span style="color: red;">❌ Pendiente</span>
             {% endif %}
         </p>
-        <a href="/pilates/usuario/pagos" class="boton">Ver pagos</a>
+        <a href="/usuario/pagos" class="boton">Ver pagos</a>
     </div>
 
     <div class="menu-bloque">
         <h3>🔐 Seguridad</h3>
         <p>Cambia tu contraseña de acceso</p>
-        <a href="/pilates/usuario/password" class="boton">Cambiar contraseña</a>
+        <a href="/usuario/password" class="boton">Cambiar contraseña</a>
     </div>
 
 </div>

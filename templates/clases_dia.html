@@ -34,7 +34,7 @@
 
                         {% if not clase.es_festivo %}
                         <form method="post"
-                              action="/pilates/admin/clases_mes/quitar"
+                              action="/admin/clases_mes/quitar"
                               class="quitar-usuario-form">
                             <input type="hidden" name="usuario_id" value="{{ u.id }}">
                             <input type="hidden" name="clase_id" value="{{ clase.id }}">
@@ -59,7 +59,7 @@
     <p>Hoy ({{ hoy }}) no hay clases.</p>
     {% endif %}
 
-    <a href="/pilates/admin" class="boton boton-secundario">⬅ Volver</a>
+    <a href="/admin" class="boton boton-secundario">⬅ Volver</a>
 
 </div>
 {% endblock %}

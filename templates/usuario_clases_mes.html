@@ -5,7 +5,7 @@
 
 <h2>Mis clases del mes</h2>
 
-<a href="/pilates/usuario" class="boton boton-secundario">
+<a href="/usuario" class="boton boton-secundario">
     ⬅ Volver
 </a>
 
@@ -67,7 +67,7 @@
                     {% elif not clase.puede_borrarse %}
                    
                     {% else %}
-                    <form method="post" action="/pilates/usuario/clase/baja">
+                    <form method="post" action="/usuario/clase/baja">
                         <input type="hidden" name="clase_id" value="{{ clase.id }}">
                         <button class="btn-baja" type="submit" onclick="return confirm('¿Seguro que quieres borrate de esta clase?')" on>
                             ❌
@@ -92,7 +92,7 @@
     {% endif %}
 
 <br>
-<a href="/pilates/usuario" class="boton boton-secundario">
+<a href="/usuario" class="boton boton-secundario">
     ⬅ Volver
 </a>
 
