@@ -1952,6 +1952,4 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
 
 
-application = DispatcherMiddleware(Response("Not Found", status=404), {
-    "/": app,
-})
+application = app
