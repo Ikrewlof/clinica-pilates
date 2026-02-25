@@ -36,7 +36,7 @@ def validar_login(email, password):
     c.execute("""
         SELECT id, nombre, rol
         FROM usuarios
-        WHERE email=? AND password=?
+        WHERE email=? AND password=? AND desactivo = 0
     """, (email, hash_password(password)))
 
     user = c.fetchone()
