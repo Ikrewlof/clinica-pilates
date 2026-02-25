@@ -1,0 +1,64 @@
+﻿{% extends "base.html" %}
+{% block title %}Logs de clases{% endblock %}
+
+{% block content %}
+
+<h2>Logs de clases</h2>
+
+<form method="get" class="selector-mes">
+    <label>Mes:</label>
+
+    <input type="month"
+           name="mes"
+           value="{{ '%04d-%02d'|format(year, month) }}"
+           required>
+
+    <button type="submit">Ver logs</button>
+    <a href="/admin" class="boton boton-secundario">Volver</a>
+</form>
+
+<br />
+<br />
+
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+
+<br />
+<br />
+
+<table>
+    <tr>
+        <th>Fecha registro</th>
+        <th>Usuario</th>
+        <th>Acción</th>
+        <th>Clase</th>
+        <th>Fecha clase</th>
+        <th>Hora</th>
+    </tr>
+
+   {% for id, create_at_fmt, nombre, accion, fecha_clase_fmt, hora, clase_id, ip in logs %}
+    <tr class="
+        {% if accion == 'ALTA' %}fila-verde
+        {% elif accion == 'BAJA' %}fila-roja
+        {% elif 'DENEGADA' in accion %}fila-amarilla
+        {% endif %}
+    ">
+        <td>{{ create_at_fmt }}</td>
+        <td>{{ nombre or '—' }}</td>
+        <td>
+            {% if accion == 'ALTA' %}✅ Alta
+            {% elif accion == 'BAJA' %}❌ Baja
+            {% elif 'DENEGADA_24H' in accion %}⏱️ Intento baja (24h)
+            {% elif 'DENEGADA_FESTIVO' in accion %}🎉 Intento baja (festivo)
+            {% else %}{{ accion }}
+            {% endif %}
+        </td>
+        <td>#{{ clase_id }}</td>
+        <td>{{ fecha_clase_fmt or '—' }}</td>
+        <td>{{ hora or '—' }}</td>
+    </tr>
+{% endfor %}
+</table>
+
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+
+{% endblock %}

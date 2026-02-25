@@ -1,0 +1,47 @@
+﻿{% extends "base.html" %}
+{% block title %}Logs de accesos{% endblock %}
+
+{% block content %}
+
+<h2>Logs de accesos</h2>
+
+<form method="get" class="selector-mes">
+    <label>Mes:</label>
+    <input type="month" name="mes" value="{{ '%04d-%02d'|format(year, month) }}" required>
+    <button type="submit">Ver accesos</button>
+    <a href="/admin" class="boton boton-secundario">Volver</a>
+</form>
+
+<br />
+
+<table>
+    <tr>
+        <th>Fecha registro</th>
+        <th>Usuario</th>
+        <th>Email</th>
+        <th>Acción</th>
+    </tr>
+
+    {% for id, create_at_fmt, nombre, email, accion, detalle, ip in logs %}
+    <tr class="
+        {% if accion == 'LOGIN_FAIL' %}fila-roja
+        {% elif accion == 'LOGIN_OK' %}fila-verde
+        {% endif %}
+    ">
+        <td>{{ create_at_fmt }}</td>
+        <td>{{ nombre }}</td>
+        <td>{{ email or '—' }}</td>
+        <td>
+            {% if accion == 'LOGIN_OK' %}✅ Login
+            {% elif accion == 'LOGIN_FAIL' %}❌ Login fallido
+            {% elif accion == 'LOGOUT' %}🚪 Logout
+            {% else %}{{ accion }}
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/admin" class="boton boton-secundario">⬅ Volver al panel</a>
+
+{% endblock %}

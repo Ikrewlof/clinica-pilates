@@ -54,28 +54,60 @@ def debug_sesion():
 def login():
     error = None
 
-
-
     if request.method == "POST":
-        user = validar_login(
-            request.form["email"],
-            request.form["password"]
-        )
+        email_introducido = request.form["email"]
+        password = request.form["password"]
+
+        user = validar_login(email_introducido, password)
+
+        # IP real (si estás detrás de proxy puede venir con lista)
+        xff = request.headers.get("X-Forwarded-For")
+        ip = (xff.split(",")[0].strip() if xff else request.remote_addr)
+        ua = request.headers.get("User-Agent")
+
+        conn = conectar()
+        c = conn.cursor()
 
         if user:
+            # ✅ Log de acceso correcto
+            registrar_log_acceso(
+                c,
+                "LOGIN_OK",
+                usuario_id=user[0],
+                email=email_introducido,
+                detalle=None,
+                ip=ip,
+                user_agent=ua
+            )
+            conn.commit()
+            conn.close()
+
             session["user_id"] = user[0]
-            session["nombre"]= user[1]
+            session["nombre"] = user[1]
             session["rol"] = user[2]
 
             if user[2] in ("admin", "supervisor"):
                 return redirect("/admin")
             else:
                 return redirect("/usuario")
+
         else:
+            # ❌ Log de acceso fallido
+            registrar_log_acceso(
+                c,
+                "LOGIN_FAIL",
+                usuario_id=None,
+                email=email_introducido,
+                detalle="Usuario o contraseña incorrectos",
+                ip=ip,
+                user_agent=ua
+            )
+            conn.commit()
+            conn.close()
+
             error = "Usuario o contraseña incorrectos"
 
     return render_template("login.html", error=error)
-
 
 @app.route("/admin")
 @login_required
@@ -91,6 +123,102 @@ def admin():
 
     return render_template("admin.html",rol=rol)
 
+
+def registrar_log_acceso(c, accion, usuario_id=None, email=None, detalle=None, ip=None, user_agent=None):
+    c.execute("""
+        INSERT INTO logs_accesos (usuario_id, email, accion, detalle, ip, user_agent)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (usuario_id, email, accion, detalle, ip, user_agent))
+
+def registrar_log_clase(c, usuario_id, clase_id, accion, fecha_clase=None, ip=None, user_agent=None):
+    c.execute("""
+        INSERT INTO logs_clases (usuario_id, clase_id, accion, fecha_clase, ip, user_agent)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (usuario_id, clase_id, accion, fecha_clase, ip, user_agent))
+
+
+@app.route("/admin/logs_accesos")
+@login_required
+@role_required("admin")
+def admin_logs_accesos():
+    if session.get("rol") != "admin":
+        abort(403)
+
+    year, month = obtener_mes_activo()
+    mes_param = request.args.get("mes")
+    if mes_param:
+        year, month = map(int, mes_param.split("-"))
+
+    conn = conectar()
+    c = conn.cursor()
+
+    logs = c.execute("""
+        SELECT
+            l.id,
+            strftime('%d/%m/%Y %H:%M', l.create_at) AS create_at_fmt,
+            COALESCE(u.nombre, '—') AS nombre,
+            l.email,
+            l.accion,
+            l.detalle,
+            l.ip
+        FROM logs_accesos l
+        LEFT JOIN usuarios u ON u.id = l.usuario_id
+        WHERE strftime('%Y-%m', l.create_at) = ?
+        ORDER BY datetime(l.create_at) DESC
+        LIMIT 1000
+    """, (f"{year:04d}-{month:02d}",)).fetchall()
+
+    conn.close()
+
+    return render_template("admin_logs_accesos.html", logs=logs, year=year, month=month)
+
+
+@app.route("/admin/logs_clases")
+@login_required
+@role_required("admin")
+def admin_logs_clases():
+    if session.get("rol") != "admin":
+        abort(403)
+
+
+    # 📅 Mes activo por defecto
+    year, month = obtener_mes_activo()
+
+    # Si el admin elige un mes en el selector (YYYY-MM), lo usamos
+    mes_param = request.args.get("mes")
+    if mes_param:
+        year, month = map(int, mes_param.split("-"))
+
+    conn = conectar()
+    c = conn.cursor()
+
+    # Últimos 500 movimientos (ajusta a tu gusto)
+    logs = c.execute("""
+        SELECT
+            l.id,
+            strftime('%d/%m/%Y %H:%M', l.create_at) AS create_at_fmt,
+            u.nombre,
+            l.accion,
+            strftime('%d/%m/%Y', l.fecha_clase) AS fecha_clase_fmt,
+            c.hora,
+            l.clase_id,
+            l.ip
+        FROM logs_clases l
+        LEFT JOIN usuarios u ON u.id = l.usuario_id
+        LEFT JOIN clases c ON c.id = l.clase_id
+        WHERE strftime('%Y-%m', l.fecha_clase) = ?
+        ORDER BY date(l.fecha_clase) DESC, time(c.hora) DESC, datetime(l.create_at) DESC
+        LIMIT 500
+    """, (f"{year:04d}-{month:02d}",)).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "admin_logs_clases.html",
+        logs=logs,
+        year=year,
+        month=month
+    )
 
 
 #GENERAR MES
@@ -304,6 +432,17 @@ def admin_quitar_usuario_clase():
         VALUES (?, ?, ?, date('now'))
     """, (usuario_id, clase_id, fecha))
 
+
+    # ✅ Log de BAJA exitosa
+    registrar_log_clase(
+        c, usuario_id, clase_id,
+        "BAJA",
+        fecha_clase=fecha,
+        ip=request.headers.get("X-Forwarded-For", request.remote_addr),
+        user_agent=request.headers.get("User-Agent")
+    )
+
+
     conn.commit()
     conn.close()
 
@@ -500,6 +639,26 @@ def admin_recuperaciones_confirmar():
         SET asignada = 1
         WHERE id = ?
     """, (recuperacion_id,))
+
+
+    # Obtener fecha de la clase para el log
+    row = c.execute("""
+        SELECT fecha
+        FROM clases
+        WHERE id = ?
+    """, (clase_id,)).fetchone()
+
+    fecha_clase = row[0] if row else None
+
+
+    registrar_log_clase(
+        c, usuario_id, clase_id,
+        "ALTA",
+        fecha_clase=fecha_clase,
+        ip=request.headers.get("X-Forwarded-For", request.remote_addr),
+        user_agent=request.headers.get("User-Agent")
+    )
+
 
     conn.commit()
     conn.close()
@@ -1608,6 +1767,17 @@ def usuario_baja_clase():
         VALUES (?, ?,?,date('now'))
     """, (usuario_id, clase_id,fecha))
 
+
+    # ✅ Log de BAJA exitosa
+    registrar_log_clase(
+        c, usuario_id, clase_id,
+        "BAJA",
+        fecha_clase=fecha,
+        ip=request.headers.get("X-Forwarded-For", request.remote_addr),
+        user_agent=request.headers.get("User-Agent")
+    )
+
+
     conn.commit()
     conn.close()
 
@@ -1762,6 +1932,7 @@ def usuario_apuntar_recuperacion():
 
     usuario_id = session["user_id"]
     clase_id = int(request.form["clase_id"])
+    
 
     conn = conectar()
     c = conn.cursor()
@@ -1809,6 +1980,25 @@ def usuario_apuntar_recuperacion():
         SET asignada = 1
         WHERE id = ?
     """, (recuperacion_id,))
+
+
+    # Obtener fecha de la clase para el log
+    row = c.execute("""
+        SELECT fecha
+        FROM clases
+        WHERE id = ?
+    """, (clase_id,)).fetchone()
+
+    fecha_clase = row[0] if row else None
+
+
+    registrar_log_clase(
+        c, usuario_id, clase_id,
+        "ALTA",
+        fecha_clase=fecha_clase,
+        ip=request.headers.get("X-Forwarded-For", request.remote_addr),
+        user_agent=request.headers.get("User-Agent")
+    )
 
     conn.commit()
     conn.close()
