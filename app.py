@@ -207,7 +207,7 @@ def admin_logs_clases():
         LEFT JOIN usuarios u ON u.id = l.usuario_id
         LEFT JOIN clases c ON c.id = l.clase_id
         WHERE strftime('%Y-%m', l.fecha_clase) = ?
-        ORDER BY date(l.fecha_clase) DESC, time(c.hora) DESC, datetime(l.create_at) DESC
+        ORDER BY l.id
         LIMIT 500
     """, (f"{year:04d}-{month:02d}",)).fetchall()
 
