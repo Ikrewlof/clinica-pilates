@@ -164,7 +164,7 @@ def admin_logs_accesos():
         FROM logs_accesos l
         LEFT JOIN usuarios u ON u.id = l.usuario_id
         WHERE strftime('%Y-%m', l.create_at) = ?
-        ORDER BY id desc
+        ORDER BY l.id desc
         LIMIT 1000
     """, (f"{year:04d}-{month:02d}",)).fetchall()
 
