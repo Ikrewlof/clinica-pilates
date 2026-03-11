@@ -1734,12 +1734,12 @@ def usuario_baja_clase():
          JOIN inscripciones i ON i.clase_id = c.id
          WHERE i.usuario_id = ?
             AND c.id = ?
-            AND datetime(c.fecha || ' ' || c.hora) >= datetime('now','localtime','+24 hours')
+            AND datetime(c.fecha || ' ' || c.hora) >= datetime('now','localtime','+12 hours')
     """, (usuario_id, clase_id)).fetchone()
 
     if not existe:
         conn.close()
-        flash("No puedes darte de baja con menos de 24 horas", "error")
+        flash("No puedes darte de baja con menos de 12 horas", "error")
         return redirect("/usuario")
 
     es_festivo = c.execute("""
