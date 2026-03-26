@@ -47,7 +47,7 @@
         <td>
             {% if accion == 'ALTA' %}✅ Alta
             {% elif accion == 'BAJA' %}❌ Baja
-            {% elif 'DENEGADA_24H' in accion %}⏱️ Intento baja (24h)
+            {% elif 'DENEGADA_12H' in accion %}⏱️ Intento baja (12h)
             {% elif 'DENEGADA_FESTIVO' in accion %}🎉 Intento baja (festivo)
             {% else %}{{ accion }}
             {% endif %}

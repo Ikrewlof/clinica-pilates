@@ -139,7 +139,7 @@ day.hoy .day-header {
     font-style: italic;
 }
 
-/* === BLOQUEADO (menos de 24h) === */
+/* === BLOQUEADO (menos de 12h) === */
 
 .event.bloqueado {
     background: #DCDCDC;
