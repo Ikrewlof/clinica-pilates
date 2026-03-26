@@ -623,7 +623,7 @@ def admin_recuperaciones_confirmar():
 
     if existe:
         conn.close()
-        flash("El usuario ya está inscrito en esta clase", "error")
+        flash("El usuario ya estaba inscrito en esta clase", "error")
         #return redirect(url_for("admin_recuperaciones"))
         return redirect("/admin/recuperaciones")
 
@@ -660,6 +660,7 @@ def admin_recuperaciones_confirmar():
     )
 
 
+
     conn.commit()
     conn.close()
 
@@ -668,6 +669,46 @@ def admin_recuperaciones_confirmar():
     return redirect("/admin/recuperaciones")
 
 
+
+
+
+@app.route("/admin/recuperaciones/borrar/<int:recuperacion_id>", methods=["POST"])
+@login_required
+@role_required("admin","supervisor")
+def borrar_recuperacion(recuperacion_id):
+    if "rol" not in session or session["rol"] not in ("admin", "supervisor"):
+        abort(403)
+
+
+    conn = conectar()
+    c = conn.cursor()
+
+    #quiero sacar los datos de la recuperacion que voy a borrar
+
+    rec = c.execute("""
+            SELECT id, usuario_id, fecha_clase, clase_original_id
+            FROM recuperaciones
+            WHERE id = ?
+        """, (recuperacion_id,)).fetchone()
+
+    rec_id,usuario_id, fecha_clase, clase_original_id = rec
+
+
+    # Marcar recuperación como asignada
+    c.execute("DELETE FROM recuperaciones WHERE id = ?", (recuperacion_id,))
+    
+    registrar_log_clase(
+        c, usuario_id, clase_original_id,
+        "Recuperación Borrada",
+        fecha_clase,
+        ip=request.headers.get("X-Forwarded-For", request.remote_addr),
+        user_agent=request.headers.get("User-Agent")
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/admin/recuperaciones")
 
 
 #pagos usuarios

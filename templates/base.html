@@ -31,13 +31,15 @@
     </header>
 
     <main>
-        {% with messages = get_flashed_messages() %}
+        
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-        <div class="flash">
-            {% for message in messages %}
-            <p>{{ message }}</p>
+        <script>
+            {% for category, message in messages %}
+                alert({{ message|tojson }});
             {% endfor %}
-        </div>
+        </script>
         {% endif %}
         {% endwith %}
 

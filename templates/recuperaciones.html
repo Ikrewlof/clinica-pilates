@@ -39,6 +39,14 @@
                 Asignar
             </a>
 
+            
+            <form method="post" 
+                  action="/admin/recuperaciones/borrar/{{ id }}" 
+                  style="display:inline;"
+                  onsubmit="return confirm('¿Seguro que quieres borrar esta recuperación para siempre?');">
+                <button type="submit" class="boton">❌ Borrar</button>
+            </form>
+
         </td>
         <td>{% if especial == 1 %}especial{% endif %}</td>
     </tr>
