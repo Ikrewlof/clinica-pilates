@@ -75,11 +75,11 @@ def obtener_usuario_por_id(usuario_id):
 from datetime import date
 from db import conectar
 
-def obtener_usuarios_con_pagos(year, month):
+def obtener_usuarios_con_pagos(year, month, estado="todos"):
     conn = conectar()
     c = conn.cursor()
 
-    usuarios = c.execute("""
+    sql = """
         SELECT
            u.id,
            u.nombre,
@@ -93,8 +93,18 @@ def obtener_usuarios_con_pagos(year, month):
            AND p.year = ?
            AND p.month = ?
         WHERE u.rol = 'usuario'
-        ORDER BY u.nombre COLLATE ES;
-    """, (year, month)).fetchall()
+    """
+
+    params = [year, month]
+
+    if estado == "impagados":
+        sql += " AND IFNULL(p.pagado, 0) = 0"
+    elif estado == "pagados":
+        sql += " AND IFNULL(p.pagado, 0) = 1"
+
+    sql += " ORDER BY u.nombre COLLATE ES"
+
+    usuarios = c.execute(sql, params).fetchall()
 
     conn.close()
     return usuarios

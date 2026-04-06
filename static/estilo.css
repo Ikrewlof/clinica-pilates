@@ -1038,3 +1038,45 @@ td.acciones {
         min-width: 520px; /* ajusta: 480–600px según te guste */
     }
 }
+
+
+
+
+/* ===== AVISO IMPORTANTE ===== */
+.aviso-importante-wrapper {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center; /* centra el bloque */
+}
+
+.menu-bloque.aviso-importante {
+    background: #fff5f5;
+    border: 1px solid #e7b4b4;
+    border-left: 5px solid #c95b5b;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    max-width: 710px; /* ajusta: 600–800px según te guste */
+}
+
+    .menu-bloque.aviso-importante h3 {
+        margin-top: 0;
+        margin-bottom: 14px;
+        color: #a63c3c;
+    }
+
+    .menu-bloque.aviso-importante p,
+    .menu-bloque.aviso-importante li {
+        color: #5c2f2f;
+        line-height: 1.6;
+    }
+
+    .menu-bloque.aviso-importante ul {
+        margin: 12px 0 14px 20px;
+        padding: 0;
+    }
+
+    .menu-bloque.aviso-importante strong {
+        color: #8f2f2f;
+    }

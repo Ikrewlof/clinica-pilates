@@ -3,23 +3,52 @@
 
 {% block content %}
 
+<!-- ===== AVISO IMPORTANTE ===== -->
+<div class="aviso-importante-wrapper">
+    <div class="menu-bloque aviso-importante">
+        <h3>⚠️ Aviso importante sobre recuperaciones</h3>
 
+        <p><strong>Aprovechamos para recordar algunos puntos referentes a las recuperaciones de clases:</strong></p>
 
+        <ul>
+            <li>
+                Las recuperaciones deben realizarse <strong>dentro del mismo mes</strong> en el que se pierde la clase.
+                <strong>No se guardan para meses posteriores</strong>.
+            </li>
 
+            <li>
+                En caso de que la clase sea <strong>a final de mes</strong>, la recuperación debe
+                <strong>gestionarse con antelación</strong> para poder realizarla en semanas anteriores,
+                <strong>siempre que haya disponibilidad</strong>.
+            </li>
 
+            <li>
+                Las recuperaciones están pensadas para <strong>casos puntuales</strong> en los que no se puede asistir
+                por un <strong>motivo justificado</strong>. <strong>No se aplican en casos de vacaciones u otros motivos personales</strong>,
+                ya que la clase se imparte con normalidad.
+            </li>
 
+            <li>
+                Además, es importante recordar que las recuperaciones <strong>no deben convertirse en algo habitual</strong>,
+                ya que esto afecta al <strong>sistema de calidad</strong> que queremos mantener en las clases de pilates.
+            </li>
+        </ul>
+
+        <p><strong>Por favor, lee esta información antes de continuar.</strong> ¡Nos vemos en clase!</p>
+    </div>
+</div>
 
 <!-- ===== NORMAS DEL CENTRO ===== -->
 <div class="normas-wrapper">
-
     <div class="menu-bloque normas">
         <h3>Hola, {{ resumen.nombre }} 👋</h3>
+
         <details class="normas-detalle">
             <summary class="btn-normas">
                 📘 Normas del centro
             </summary>
-            <div class="contenido-normas">
 
+            <div class="contenido-normas">
                 <p>
                     En <strong>Fisioterapia Garval. Centro de Salud y Bienestar</strong>, creemos que no solo trabajamos
                     el movimiento, trabajamos con personas. Por eso, nuestras clases de
@@ -38,10 +67,9 @@
                     reservados para situaciones puntuales o de causa mayor, y siempre que exista
                     algún <strong>hueco libre</strong> en otro grupo compatible.
                 </p>
-                <br />
+
                 <p>
-                    <br />
-                    <strong>🔁 Recuperaciones de clase</strong><br></br>
+                    <strong>🔁 Recuperaciones de clase</strong><br>
                     Las recuperaciones solo pueden realizarse dentro del <strong>mes en curso</strong>.
                     Las clases no se acumulan ni se guardan para meses posteriores.
                 </p>
@@ -57,7 +85,7 @@
                     el grupo funcione de la mejor manera posible y todas las personas reciban la
                     atención que merecen. 💙
                 </p>
-                </br>
+
                 <p>
                     Para más información, puedes consultar los siguientes documentos:
                     <a href="/static/docs/Normas_Fisioterapia_Garval.pdf" target="_blank">
@@ -68,10 +96,9 @@
                         <strong>Festivos y cuota mensual</strong>
                     </a>.
                 </p>
-
             </div>
-</div>
-
+        </details>
+    </div>
 </div>
 
 <h2>
@@ -123,7 +150,7 @@
 
 </div>
 
-<hr>
+
 
 <div class="acciones-form">
     <a href="/" class="boton boton-secundario">Cerrar sesión</a>

@@ -10,6 +10,25 @@
 <br />
 <br />
 
+<div class="acciones-superior filtros-botones">
+    <a href="/admin/pagos?estado=todos"
+       class="boton {% if estado_filtro == 'todos' %}boton-activo{% else %}boton-secundario{% endif %}">
+        Todos
+    </a>
+
+    <a href="/admin/pagos?estado=impagados"
+       class="boton {% if estado_filtro == 'impagados' %}boton-activo{% else %}boton-secundario{% endif %}">
+        No pagados
+    </a>
+
+    <a href="/admin/pagos?estado=pagados"
+       class="boton {% if estado_filtro == 'pagados' %}boton-activo{% else %}boton-secundario{% endif %}">
+        Pagados
+    </a>
+</div>
+
+<br />
+
 <table>
     <tr>
         <th>Usuario</th>
@@ -22,7 +41,9 @@
 
     {% for id, nombre, clases_semana, pagado, metodo_pago, cuota in usuarios %}
 
-    <form method="post" action="/admin/pagos/toggle/{{ id }}" id="form-pago-{{ id }}"></form>
+    <form method="post" action="/admin/pagos/toggle/{{ id }}" id="form-pago-{{ id }}">
+        <input type="hidden" name="estado" value="{{ estado_filtro }}">
+    </form>
 
     <tr class="{% if not pagado %}fila-roja{% endif %}">
         <td>{{ nombre }}</td>

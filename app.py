@@ -726,7 +726,7 @@ def admin_pagos():
     hoy = date.today()
     year, month = obtener_mes_activo()
 
-    mes_activo = f"{year}-{month:02d}"     
+    mes_activo = f"{year}-{month:02d}"
 
     meses = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -735,14 +735,16 @@ def admin_pagos():
 
     mes_literal = meses[month - 1]
 
+    estado_filtro = request.args.get("estado", "todos")
 
-    usuarios = obtener_usuarios_con_pagos(year, month)
+    usuarios = obtener_usuarios_con_pagos(year, month, estado_filtro)
 
     return render_template(
         "pagos.html",
         usuarios=usuarios,
         year=year,
-        mes_literal=mes_literal
+        mes_literal=mes_literal,
+        estado_filtro=estado_filtro
     )
 
 from datetime import date
@@ -808,7 +810,8 @@ def admin_toggle_pago(usuario_id):
     conn.commit()
     conn.close()
 
-    return redirect("/admin/pagos")
+    estado = request.form.get("estado", "todos")
+    return redirect(url_for("admin_pagos", estado=estado))
 
 
 
@@ -1557,6 +1560,8 @@ def panel_usuario():
 
     hoy = date.today()
     year, month = obtener_mes_activo()
+
+ 
 
     meses = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
