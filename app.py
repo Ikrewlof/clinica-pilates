@@ -436,7 +436,7 @@ def admin_quitar_usuario_clase():
     # ✅ Log de BAJA exitosa
     registrar_log_clase(
         c, usuario_id, clase_id,
-        "BAJA",
+        "BAJA-" + session["nombre"],
         fecha_clase=fecha,
         ip=request.headers.get("X-Forwarded-For", request.remote_addr),
         user_agent=request.headers.get("User-Agent")
@@ -653,7 +653,7 @@ def admin_recuperaciones_confirmar():
 
     registrar_log_clase(
         c, usuario_id, clase_id,
-        "ALTA",
+        "ALTA-"+ session["nombre"],
         fecha_clase=fecha_clase,
         ip=request.headers.get("X-Forwarded-For", request.remote_addr),
         user_agent=request.headers.get("User-Agent")
@@ -699,7 +699,7 @@ def borrar_recuperacion(recuperacion_id):
     
     registrar_log_clase(
         c, usuario_id, clase_original_id,
-        "Recuperación Borrada",
+        "Recuperación Borrada-"+ session["nombre"],
         fecha_clase,
         ip=request.headers.get("X-Forwarded-For", request.remote_addr),
         user_agent=request.headers.get("User-Agent")
@@ -1817,7 +1817,7 @@ def usuario_baja_clase():
     # ✅ Log de BAJA exitosa
     registrar_log_clase(
         c, usuario_id, clase_id,
-        "BAJA",
+        "BAJA-"+ session["nombre"],
         fecha_clase=fecha,
         ip=request.headers.get("X-Forwarded-For", request.remote_addr),
         user_agent=request.headers.get("User-Agent")
@@ -2040,7 +2040,7 @@ def usuario_apuntar_recuperacion():
 
     registrar_log_clase(
         c, usuario_id, clase_id,
-        "ALTA",
+        "ALTA-"+ session["nombre"],
         fecha_clase=fecha_clase,
         ip=request.headers.get("X-Forwarded-For", request.remote_addr),
         user_agent=request.headers.get("User-Agent")
