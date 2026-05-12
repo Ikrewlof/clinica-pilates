@@ -92,7 +92,7 @@ def obtener_usuarios_con_pagos(year, month, estado="todos"):
            ON u.id = p.usuario_id
            AND p.year = ?
            AND p.month = ?
-        WHERE u.rol = 'usuario'
+        WHERE u.rol = 'usuario' and u.desactivo=0
     """
 
     params = [year, month]
