@@ -9,6 +9,7 @@ from clases import (
     obtener_clases_base,
     obtener_asignaciones_usuario,
     obtener_clases_base_con_ocupacion,
+    obtener_clases_base_con_ocupacion2,
     asignar_clase_fija,
     quitar_asignacion
 )
@@ -1352,7 +1353,7 @@ def admin_asignar_usuario(usuario_id):
         abort(403)
 
     usuario = obtener_usuario_por_id(usuario_id)
-    clases = obtener_clases_base_con_ocupacion()
+    clases = obtener_clases_base_con_ocupacion2()
     asignadas = obtener_asignaciones_usuario(usuario_id)
 
     return render_template(
@@ -2180,6 +2181,7 @@ def guardar_recuperacion():
 
     flash("Recuperación añadida correctamente", "success")
     return redirect("/admin/recuperaciones")
+
 
 
 

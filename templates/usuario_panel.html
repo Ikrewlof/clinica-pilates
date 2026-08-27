@@ -3,157 +3,211 @@
 
 {% block content %}
 
-<!-- ===== AVISO IMPORTANTE ===== -->
-<div class="aviso-importante-wrapper">
-    <div class="menu-bloque aviso-importante">
-        <h3>⚠️ Aviso importante sobre recuperaciones</h3>
-
-        <p><strong>Aprovechamos para recordar algunos puntos referentes a las recuperaciones de clases:</strong></p>
-
-        <ul>
-            <li>
-                Las recuperaciones deben realizarse <strong>dentro del mismo mes</strong> en el que se pierde la clase.
-                <strong>No se guardan para meses posteriores</strong>.
-            </li>
-
-            <li>
-                En caso de que la clase sea <strong>a final de mes</strong>, la recuperación debe
-                <strong>gestionarse con antelación</strong> para poder realizarla en semanas anteriores,
-                <strong>siempre que haya disponibilidad</strong>.
-            </li>
-
-            <li>
-                Las recuperaciones están pensadas para <strong>casos puntuales</strong> en los que no se puede asistir
-                por un <strong>motivo justificado</strong>. <strong>No se aplican en casos de vacaciones u otros motivos personales</strong>,
-                ya que la clase se imparte con normalidad.
-            </li>
-
-            <li>
-                Además, es importante recordar que las recuperaciones <strong>no deben convertirse en algo habitual</strong>,
-                ya que esto afecta al <strong>sistema de calidad</strong> que queremos mantener en las clases de pilates.
-            </li>
-        </ul>
-
-        <p><strong>Por favor, lee esta información antes de continuar.</strong> ¡Nos vemos en clase!</p>
-    </div>
-</div>
-
-<!-- ===== NORMAS DEL CENTRO ===== -->
+<!-- ===== nueva bienvenida
+    ===== -->
 <div class="normas-wrapper">
     <div class="menu-bloque normas">
-        <h3>Hola, {{ resumen.nombre }} 👋</h3>
+       
+        <div class="contenido-normas">
 
-        <details class="normas-detalle">
-            <summary class="btn-normas">
-                📘 Normas del centro
-            </summary>
+            <h3><strong>¡Bienvenidos a la nueva temporada de Pilates en Garval! 👋</strong></h3>
 
-            <div class="contenido-normas">
                 <p>
-                    En <strong>Fisioterapia Garval. Centro de Salud y Bienestar</strong>, creemos que no solo trabajamos
-                    el movimiento, trabajamos con personas. Por eso, nuestras clases de
-                    <strong>pilates terapéutico</strong> se organizan en grupos muy reducidos
-                    (máximo <strong>4 personas</strong>), cuidadosamente creados según niveles,
-                    necesidades y patologías.
+                    Queremos daros las <strong>gracias por seguir confiando en nosotros un curso más</strong>.
                 </p>
 
                 <p>
-                    Cada alumn@ tiene asignado un <strong>día y una hora fija</strong>, ya que las sesiones
-                    se diseñan específicamente para ese grupo.
+                    Durante este verano hemos estado trabajando para seguir mejorando vuestra experiencia
+                    y ofreceros un servicio cada vez más completo. Por ello, hemos renovado nuestra
+                    <strong>sala de Pilates</strong> e incorporado nuevos equipos <strong>Reformer</strong>,
+                    que nos permitirán ampliar las posibilidades de trabajo manteniendo la esencia que
+                    siempre ha caracterizado nuestras clases:
+                    <strong>grupos reducidos, atención personalizada y adaptación a las necesidades de cada persona</strong>.
                 </p>
 
                 <p>
-                    👉 Por este motivo, los <strong>cambios de clase</strong> deben ser algo excepcional,
-                    reservados para situaciones puntuales o de causa mayor, y siempre que exista
-                    algún <strong>hueco libre</strong> en otro grupo compatible.
+                    Cuando lleguéis encontraréis un <strong>espacio renovado</strong>, diseñado para que las
+                    clases sean más cómodas, dinámicas y versátiles. Los nuevos Reformers nos permitirán
+                    realizar tanto el trabajo que ya conocéis como incorporar nuevas opciones de
+                    <strong>ejercicio, progresión y adaptación</strong>.
                 </p>
 
                 <p>
-                    <strong>🔁 Recuperaciones de clase</strong><br>
-                    Las recuperaciones solo pueden realizarse dentro del <strong>mes en curso</strong>.
-                    Las clases no se acumulan ni se guardan para meses posteriores.
+                    Seguiremos trabajando en <strong>grupos de máximo 4 personas</strong>, manteniendo nuestro
+                    <strong>enfoque terapéutico</strong> y el <strong>trato cercano</strong> que forman parte
+                    de la filosofía de Garval.
                 </p>
 
                 <p>
-                    Este sistema nos permite mantener la <strong>calidad</strong>, <strong>seguridad</strong>
-                    y <strong>personalización</strong> que definen nuestro trabajo y que hacen posible
-                    una evolución real y cuidada.
+                    Estamos muy ilusionados con esta <strong>nueva etapa</strong> y deseando compartirla
+                    con todos vosotros.
                 </p>
 
                 <p>
-                    Te agradecemos tu <strong>comprensión</strong> y <strong>colaboración</strong> para que
-                    el grupo funcione de la mejor manera posible y todas las personas reciban la
-                    atención que merecen. 💙
+                    <strong>¡Nos vemos muy pronto en clase!</strong> 💙
                 </p>
 
-                <p>
-                    Para más información, puedes consultar los siguientes documentos:
-                    <a href="/static/docs/Normas_Fisioterapia_Garval.pdf" target="_blank">
-                        <strong>Normas Fisioterapia Garval</strong>
-                    </a>
-                    y la
-                    <a href="/static/docs/Festivos_y_cuota_mensual.pdf" target="_blank">
-                        <strong>Festivos y cuota mensual</strong>
-                    </a>.
-                </p>
-            </div>
-        </details>
+        </div>
     </div>
 </div>
 
-<h2>
-    Mes de {{ mes_literal }} de {{ year }}
-</h2>
 
-<!-- ===== TARJETAS ===== -->
-<div class="admin-menu">
 
-    <div class="menu-bloque">
-        <h3>📅 Clases</h3>
-        <p>
-            <strong>{{ resumen.clases_semana }}</strong> clases / semana
-        </p>
-        <a href="/usuario/clases" class="boton">Ver mis clases</a>
+    <!-- ===== AVISO IMPORTANTE ===== -->
+    <div class="aviso-importante-wrapper">
+        <div class="menu-bloque aviso-importante">
+            <h3>⚠️ Aviso importante sobre recuperaciones</h3>
+
+            <p><strong>Aprovechamos para recordar algunos puntos referentes a las recuperaciones de clases:</strong></p>
+
+            <ul>
+                <li>
+                    Las recuperaciones deben realizarse <strong>dentro del mismo mes</strong> en el que se pierde la clase.
+                    <strong>No se guardan para meses posteriores</strong>.
+                </li>
+
+                <li>
+                    En caso de que la clase sea <strong>a final de mes</strong>, la recuperación debe
+                    <strong>gestionarse con antelación</strong> para poder realizarla en semanas anteriores,
+                    <strong>siempre que haya disponibilidad</strong>.
+                </li>
+
+                <li>
+                    Las recuperaciones están pensadas para <strong>casos puntuales</strong> en los que no se puede asistir
+                    por un <strong>motivo justificado</strong>. <strong>No se aplican en casos de vacaciones u otros motivos personales</strong>,
+                    ya que la clase se imparte con normalidad.
+                </li>
+
+                <li>
+                    Además, es importante recordar que las recuperaciones <strong>no deben convertirse en algo habitual</strong>,
+                    ya que esto afecta al <strong>sistema de calidad</strong> que queremos mantener en las clases de pilates.
+                </li>
+            </ul>
+
+            <p><strong>Por favor, lee esta información antes de continuar.</strong> ¡Nos vemos en clase!</p>
+        </div>
     </div>
 
-    <div class="menu-bloque">
-        <h3>🔁 Recuperaciones</h3>
-        <p>
-            Disponibles: <strong>{{ resumen.recuperaciones }}</strong>
-        </p>
+    <!-- ===== NORMAS DEL CENTRO ===== -->
+    <div class="normas-wrapper">
+        <div class="menu-bloque normas">
+            <h3>Hola, {{ resumen.nombre }} 👋</h3>
 
-        {% if resumen.recuperaciones > 0 %}
-        <a href="/usuario/recuperaciones" class="boton">Gestionar</a>
-        {% else %}
-        <span class="info-clases">No tienes recuperaciones</span>
-        {% endif %}
+            <details class="normas-detalle">
+                <summary class="btn-normas">
+                    📘 Normas del centro
+                </summary>
+
+                <div class="contenido-normas">
+                    <p>
+                        En <strong>Fisioterapia Garval. Centro de Salud y Bienestar</strong>, creemos que no solo trabajamos
+                        el movimiento, trabajamos con personas. Por eso, nuestras clases de
+                        <strong>pilates terapéutico</strong> se organizan en grupos muy reducidos
+                        (máximo <strong>4 personas</strong>), cuidadosamente creados según niveles,
+                        necesidades y patologías.
+                    </p>
+
+                    <p>
+                        Cada alumn@ tiene asignado un <strong>día y una hora fija</strong>, ya que las sesiones
+                        se diseñan específicamente para ese grupo.
+                    </p>
+
+                    <p>
+                        👉 Por este motivo, los <strong>cambios de clase</strong> deben ser algo excepcional,
+                        reservados para situaciones puntuales o de causa mayor, y siempre que exista
+                        algún <strong>hueco libre</strong> en otro grupo compatible.
+                    </p>
+
+                    <p>
+                        <strong>🔁 Recuperaciones de clase</strong><br>
+                        Las recuperaciones solo pueden realizarse dentro del <strong>mes en curso</strong>.
+                        Las clases no se acumulan ni se guardan para meses posteriores.
+                    </p>
+
+                    <p>
+                        Este sistema nos permite mantener la <strong>calidad</strong>, <strong>seguridad</strong>
+                        y <strong>personalización</strong> que definen nuestro trabajo y que hacen posible
+                        una evolución real y cuidada.
+                    </p>
+
+                    <p>
+                        Te agradecemos tu <strong>comprensión</strong> y <strong>colaboración</strong> para que
+                        el grupo funcione de la mejor manera posible y todas las personas reciban la
+                        atención que merecen. 💙
+                    </p>
+
+                    <p>
+                        Para más información, puedes consultar los siguientes documentos:
+                        <a href="/static/docs/Normas_Fisioterapia_Garval.pdf" target="_blank">
+                            <strong>Normas Fisioterapia Garval</strong>
+                        </a>
+                        y la
+                        <a href="/static/docs/Festivos_y_cuota_mensual.pdf" target="_blank">
+                            <strong>Festivos y cuota mensual</strong>
+                        </a>.
+                    </p>
+                </div>
+            </details>
+        </div>
     </div>
 
-    <div class="menu-bloque">
-        <h3>💳 Pago</h3>
-        <p>
-            Cuota: <strong>{{ resumen.cuota }} €</strong><br>
-            {% if resumen.pagado %}
-            <span style="color: green;">✅ Pagado</span>
+    <h2>
+        Mes de {{ mes_literal }} de {{ year }}
+    </h2>
+
+    <!-- ===== TARJETAS ===== -->
+    <div class="admin-menu">
+
+        <div class="menu-bloque">
+            <h3>📅 Clases</h3>
+            <p>
+                <strong>{{ resumen.clases_semana }}</strong> clases / semana
+            </p>
+            <a href="/usuario/clases" class="boton">Ver mis clases</a>
+        </div>
+
+        <div class="menu-bloque">
+            <h3>🔁 Recuperaciones</h3>
+            <p>
+                Disponibles: <strong>{{ resumen.recuperaciones }}</strong>
+            </p>
+
+            {% if resumen.recuperaciones > 0 %}
+            <a href="/usuario/recuperaciones" class="boton">Gestionar</a>
             {% else %}
-            <span style="color: red;">❌ Pendiente</span>
+            <span class="info-clases">No tienes recuperaciones</span>
             {% endif %}
-        </p>
-        <a href="/usuario/pagos" class="boton">Ver pagos</a>
+        </div>
+
+
+
+        <div class="menu-bloque">
+            <h3>💳 Pago</h3>
+            <p>
+                Cuota: <strong>{{ resumen.cuota }} €</strong><br>
+                {% if resumen.pagado %}
+                <span style="color: green;">✅ Pagado</span>
+                {% else %}
+                <span style="color: red;">❌ Pendiente</span>
+                {% endif %}
+            </p>
+            <a href="/usuario/pagos" class="boton">Ver pagos</a>
+        </div>
+
+        <div class="menu-bloque">
+            <h3>🔐 Seguridad</h3>
+            <p>Cambia tu contraseña de acceso</p>
+            <a href="/usuario/password" class="boton">Cambiar contraseña</a>
+        </div>
+
+
+
     </div>
 
-    <div class="menu-bloque">
-        <h3>🔐 Seguridad</h3>
-        <p>Cambia tu contraseña de acceso</p>
-        <a href="/usuario/password" class="boton">Cambiar contraseña</a>
+
+
+    <div class="acciones-form">
+        <a href="/" class="boton boton-secundario">Cerrar sesión</a>
     </div>
 
-</div>
-
-
-
-<div class="acciones-form">
-    <a href="/" class="boton boton-secundario">Cerrar sesión</a>
-</div>
-
-{% endblock %}
+    {% endblock %}

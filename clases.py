@@ -322,6 +322,38 @@ def obtener_clases_base_con_ocupacion():
     conn.close()
     return clases
 
+def obtener_clases_base_con_ocupacion2():
+    conn = conectar()
+    c = conn.cursor()
+
+    clases = c.execute("""
+        SELECT
+            cb.id,
+            cb.dia_semana,
+            cb.hora,
+            cb.descripcion,
+            COUNT(af.id) as ocupacion,
+            cb.capacidad,            
+            cb.activa     
+        FROM clases_base cb
+        LEFT JOIN asignaciones_fijas af
+            ON cb.id = af.clase_base_id
+            where activa=1
+        GROUP BY
+            cb.id,
+            cb.dia_semana,
+            cb.hora,
+            cb.capacidad,
+            cb.activa
+        ORDER BY
+            cb.dia_semana,
+            cb.hora
+    """).fetchall()
+
+  
+
+    conn.close()
+    return clases
 
 
 from datetime import date
